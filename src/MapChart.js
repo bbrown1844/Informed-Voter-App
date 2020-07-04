@@ -10,7 +10,7 @@ import {
 
 import allStates from "./data/allstates.json";
 
-const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/california-10m.json";
+const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 
 const offsets = {
   VT: [50, -8],
@@ -23,14 +23,6 @@ const offsets = {
   MD: [47, 10],
   DC: [49, 21]
 };
-
-const markers = [
-  {
-    markerOffset: 0,
-    name: "Los Angeles",
-    coordinates: [34.0522, 118.2437]
-  },
-];
 
 const MapChart = () => {
   return (
@@ -82,6 +74,3 @@ const MapChart = () => {
 };
 
 export default MapChart;
-
-
-

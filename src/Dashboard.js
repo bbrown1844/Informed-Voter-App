@@ -1,6 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { render } from 'react-dom';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -202,8 +200,3 @@ export default function Dashboard() {
     </div>
   );
 }
-
-ReactDOM.render(
-  <Dashboard />,
-  document.getElementById('root')
-);
