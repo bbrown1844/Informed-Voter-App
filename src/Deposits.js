@@ -19,7 +19,7 @@ export default function Deposits() {
   return (
     <React.Fragment>
       <Title>Current Address</Title>
-      <Title>Nearest Polling Location</Title>
+      <Title>Nearest Polling Station</Title>
       {/*}
       <Typography color="textSecondary" className={classes.depositContext}>
         on 15 March, 2019

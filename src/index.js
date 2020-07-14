@@ -162,10 +162,14 @@ const theme = createMuiTheme({
 
 let autoComplete;
 let info;
+let Executive = [];
+let Judicial = [];
 let positions = [];
 let address = [];
 let currentAddress;
-let rows = [];
+let exec_rows = [];
+let jud_rows = [];
+let law_rows = [];
 
 const loadScript = (url, callback) => {
   let script = document.createElement("script");
@@ -216,27 +220,106 @@ async function handlePlaceSelect(updateQuery) {
      } 
   };
 
+  var options2 = { method: 'GET',
+    url: 'https://www.googleapis.com/civicinfo/v2/voterinfo?key=AIzaSyDbh-xo-acZhcEKNlr9IuG6TGaA-8UI3Ys',
+    qs: 
+     { address: addressObject.formatted_address,
+       electionId: '2020',
+       officialOnly: 'false',
+       returnAllAvailableData: 'true' 
+     } 
+  };
+
   request(options, function (error, response, body) {
     if (error) throw new Error(error);
     info = JSON.parse(body);
     var temp = info['offices'];
-    var temp2 = info['officials']
-    var i;
-    for (i = 0; i < temp.length; i++) {
-      positions.push(temp[i]["name"])
+    var temp2 = info['officials'];
+    var i = 0;
+    var sec = 0;
+
+    //TODO: Add in phone #
+    while (i < temp.length) {
+      let tempDict = {};
+      
+      if (temp[i]["name"] == "U.S. Senator"){
+          tempDict['name'] = temp2[sec]['name'];
+          tempDict['pos'] = "U.S. Senator";
+          try{
+            tempDict['address'] = temp2[sec]['address'][0]["line1"]
+          }
+          catch (err)
+          {
+            tempDict['address'] = "None";
+          }
+          Executive.push(tempDict);
+          tempDict = {};
+          tempDict['name'] = temp2[sec+1]['name'];
+          tempDict['pos'] = "U.S. Senator";
+          try{
+            tempDict['address'] = temp2[sec+1]['address'][0]["line1"]
+          }
+          catch (err)
+          {
+            tempDict['address'] = "None";
+          }
+          Executive.push(tempDict);
+          sec+=2;
+      }
+      else if (temp[i]["name"] == "CA Supreme Court Justice"){
+        var j;
+        for (j=0; j<7; j++)
+        {
+          tempDict ={}
+          tempDict['name'] = temp2[sec]['name'];
+          tempDict['pos'] = "CA Supreme Court Justice";
+          try{
+            tempDict['address'] = temp2[sec]['address'][0]["line1"]
+          }
+          catch (err)
+          {
+            tempDict['address'] = "None";
+          }          
+          Judicial.push(tempDict);
+          sec+=1
+        }
+      }
+      else
+      {
+        tempDict['name'] = temp2[sec]['name'];
+        tempDict['pos'] = temp[i]["name"];
+        try{
+          tempDict['address'] = temp2[sec]['address'][0]["line1"]
+        }
+        catch (err)
+        {
+          tempDict['address'] = "None";
+        }
+        Executive.push(tempDict);
+        sec+=1;
+      }
+      ++i
     }
 
     for (i = 0; i < temp2.length-1; i++) {
       try {
-        address.push(temp2[i]['address'][0]["line1"])
+        address.push(temp2[i]['address'][0]["line1"]);
       }
       catch (err)
       {
-        address.push("None")
+        address.push("None");
       }
     }
     // console.log(address);
-    // console.log(info);
+    console.log(info);
+    console.log(Executive);
+    console.log(Judicial);
+
+  });
+
+  request(options2, function (error, response, body) {
+    if (error) throw new Error(error);
+    console.log(body)
   });
 }
 
@@ -267,12 +350,15 @@ function getData(){
   //   createData(4, info['officials'][4]['name'], positions[4], address[4], info['officials'][4]['phones'][0], ""),
   // ];
   var i;
-  console.log(info.length)
-  for (i=0; i<info['officials'].length; i++)
+  for (i=0; i<Executive.length; i++)
   {
-    console.log("jere")
     console.log(createData(i, info['officials'][i]['name'], positions[i], address[i], info['officials'][i]['phones'][0], ""))
-    rows.push(createData(i, info['officials'][i]['name'], positions[i], address[i], info['officials'][i]['phones'][0], ""))
+    exec_rows.push(createData(i, Executive[i]['name'], Executive[i]['pos'], Executive[i]['address'], info['officials'][i]['phones'][0], ""))
+  }
+  for (i=0; i<Judicial.length; i++)
+  {
+    console.log(createData(i, info['officials'][i]['name'], positions[i], address[i], info['officials'][i]['phones'][0], ""))
+    jud_rows.push(createData(i, Judicial[i]['name'], Judicial[i]['pos'], Judicial[i]['address'], info['officials'][i]['phones'][0], ""))
   }
 }
 
@@ -292,7 +378,7 @@ function Deposits() {
     <React.Fragment>
       <Title>Current Address</Title>
       <p>{currentAddress}</p>
-      <Title>Nearest Polling Location</Title>
+      <Title>Nearest Polling Station</Title>
       {/*}
       <Typography color="textSecondary" className={classes.depositContext}>
         on 15 March, 2019
@@ -331,7 +417,7 @@ function Orders() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {exec_rows.map((row) => (
             <TableRow key={row.id}>
               <TableCell>{row.date}</TableCell>
               <TableCell>{row.name}</TableCell>
@@ -360,7 +446,7 @@ function Orders() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {jud_rows.map((row) => (
             <TableRow key={row.id}>
               <TableCell>{row.date}</TableCell>
               <TableCell>{row.name}</TableCell>
@@ -389,7 +475,7 @@ function Orders() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {law_rows.map((row) => (
             <TableRow key={row.id}>
               <TableCell>{row.date}</TableCell>
               <TableCell>{row.name}</TableCell>
