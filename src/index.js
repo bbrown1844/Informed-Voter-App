@@ -41,7 +41,7 @@ import Title from './Title';
 import Avatar from '@material-ui/core/Avatar';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import GavelIcon from '@material-ui/icons/Gavel';
-
+import HowToVoteIcon from '@material-ui/icons/HowToVote';
 
 import {
   BrowserRouter as Router,
@@ -129,6 +129,10 @@ const useStyles = makeStyles((theme) => ({
   },
   fixedHeight: {
     height: 240,
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
   },
 }));
 
@@ -629,18 +633,30 @@ function SignIn() {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <img alt="flag" className="flag" src={logo} />
+        <Grid container className={classes.root} spacing={2} justify="center">
+          <Grid item xs={6} alignItems="center">
+            <Avatar className={classes.avatar}>
+              <HowToVoteIcon/>
+            </Avatar>
+          </Grid>
+        </Grid>
         <br></br>
-        <Typography component="h1" variant="h4">
-          Informed Voter
-        </Typography>
+        <Grid container className={classes.root} spacing={2} justify="center">
+          <Grid item xs={11} alignItems="center">
+            <Typography component="h1" variant="h4">
+              Informed Voter
+            </Typography>
+          </Grid>
+        </Grid>
+        
         <br></br>
         <div>
          Find information on your elected officials
         </div>
+        <br></br>
         <form className={classes.form} noValidate>
           <Grid container className={classes.root} spacing={2} justify="center">
-            <Grid item xs={4} alignItems="center">
+            <Grid item xs={8} alignItems="center">
               <input 
                 onChange= {event => setQuery(event.target.value)} 
                 placeholder={"Enter a City"}
@@ -648,134 +664,82 @@ function SignIn() {
                 value = {query}
               />
             </Grid>
-            {/*
-            <Grid item xs={6}>
-              <ThemeProvider theme={theme}>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
-                >
-                  Sign In
-                </Button>
-              </ThemeProvider>
-            </Grid>
-          */}
-          </Grid>
-          {/*
-          <Grid container>
-            <Grid item xs>
-              <MapChart />
+            <Grid item xs={6} alignItems="center">
+              <Button component={Link} to="/">
+                Submit
+              </Button>
             </Grid>
           </Grid>
-          <Grid container justify="center">
-            <Grid item xs >
-              <Link href="#" variant="body2">
-                Subcribe for updates
-              </Link>
-            </Grid>
-          </Grid>
-          */}
         </form>
-        <Button component={Link} to="/">
-          Submit
-        </Button>
       </div>
+      {/*
       <Box mt={8}>
         <Copyright />
       </Box>
+    */}
     </Container>
   );
 }
 
-// import {
-//   BrowserRouter as Router,
-//   Switch,
-//   Route,
-//   Link,
-//   useRouteMatch,
-//   useParams
-// } from "react-router-dom";
+// function SignIn() {
+//   const classes = useStyles();
 
-// export default function App() {
+//   const [query, setQuery] = useState("");
+//   const autoCompleteRef = useRef(null);
+
+//   useEffect(() => {
+//     loadScript(
+//       `https://maps.googleapis.com/maps/api/js?key=AIzaSyDbh-xo-acZhcEKNlr9IuG6TGaA-8UI3Ys&libraries=places`,
+//       () => handleScriptLoad(setQuery, autoCompleteRef)
+//     );
+//   }, []);
+
+
 //   return (
-//     <Router>
-//       <div>
-//         <ul>
-//           <li>
-//             <Link to="/">Home</Link>
-//           </li>
-//           <li>
-//             <Link to="/about">About</Link>
-//           </li>
-//           <li>
-//             <Link to="/topics">Topics</Link>
-//           </li>
-//         </ul>
-
-//         <Switch>
-//           <Route path="/about">
-//             <About />
-//           </Route>
-//           <Route path="/topics">
-//             <Topics />
-//           </Route>
-//           <Route path="/">
-//             <Home />
-//           </Route>
-//         </Switch>
+//     <Container component="main" maxWidth="xs">
+//       <CssBaseline />
+//       <div className={classes.paper}>
+//         <Grid container className={classes.root} spacing={2} justify="center">
+//           <Grid item xs={6} alignItems="center">
+//             <Avatar className={classes.avatar}>
+//               <HowToVoteIcon/>
+//             </Avatar>
+//           </Grid>
+//           <Grid item xs={6} alignItems="center">
+//             <Typography component="h1" variant="h4">
+//               Informed Voter
+//             </Typography>
+//           </Grid>
+//         </Grid>
+        
+//         <div>
+//          Find information on your elected officials
+//         </div>
+//         <br></br>
+//         <form className={classes.form} noValidate>
+//           <Grid container className={classes.root} spacing={2} justify="center">
+//             <Grid item xs={8} alignItems="center">
+//               <input 
+//                 onChange= {event => setQuery(event.target.value)} 
+//                 placeholder={"Enter a City"}
+//                 ref = {autoCompleteRef}
+//                 value = {query}
+//               />
+//             </Grid>
+//             <Grid item xs={6} alignItems="center">
+//               <Button component={Link} to="/">
+//                 Submit
+//               </Button>
+//             </Grid>
+//           </Grid>
+//         </form>
+        
 //       </div>
-//     </Router>
+//       <Box mt={8}>
+//         <Copyright />
+//       </Box>
+//     </Container>
 //   );
-// }
-
-// function Home() {
-//   return <h2>Home</h2>;
-// }
-
-// function About() {
-//   return <h2>About</h2>;
-// }
-
-// function Topics() {
-//   let match = useRouteMatch();
-
-//   return (
-//     <div>
-//       <h2>Topics</h2>
-
-//       <ul>
-//         <li>
-//           <Link to={`${match.url}/components`}>Components</Link>
-//         </li>
-//         <li>
-//           <Link to={`${match.url}/props-v-state`}>
-//             Props v. State
-//           </Link>
-//         </li>
-//       </ul>
-
-//       {/* The Topics page has its own <Switch> with more routes
-//           that build on the /topics URL path. You can think of the
-//           2nd <Route> here as an "index" page for all topics, or
-//           the page that is shown when no topic is selected */}
-//       <Switch>
-//         <Route path={`${match.path}/:topicId`}>
-//           <Topic />
-//         </Route>
-//         <Route path={match.path}>
-//           <h3>Please select a topic.</h3>
-//         </Route>
-//       </Switch>
-//     </div>
-//   );
-// }
-
-// function Topic() {
-//   let { topicId } = useParams();
-//   return <h3>Requested topic ID: {topicId}</h3>;
 // }
 
 ReactDOM.render(
