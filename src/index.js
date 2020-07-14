@@ -27,7 +27,7 @@ import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from './listItems';
 import Chart from './Chart';
-import Deposits from './Deposits';
+// import Deposits from './Deposits';
 // import Orders from './Orders';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
@@ -162,7 +162,10 @@ const theme = createMuiTheme({
 
 let autoComplete;
 let info;
-let rows = []
+let positions = [];
+let address = [];
+let currentAddress;
+let rows = [];
 
 const loadScript = (url, callback) => {
   let script = document.createElement("script");
@@ -200,12 +203,14 @@ async function handlePlaceSelect(updateQuery) {
   updateQuery(query);
   // console.log(addressObject);
 
+  currentAddress = addressObject.formatted_address;
+
   var request = require("request");
   var options = { method: 'GET',
     url: 'https://www.googleapis.com/civicinfo/v2/representatives?key=AIzaSyDbh-xo-acZhcEKNlr9IuG6TGaA-8UI3Ys',
     qs: 
      { address: addressObject.formatted_address,
-       electionId: '2000',
+       electionId: '2020',
        officialOnly: 'false',
        returnAllAvailableData: 'true' 
      } 
@@ -214,8 +219,24 @@ async function handlePlaceSelect(updateQuery) {
   request(options, function (error, response, body) {
     if (error) throw new Error(error);
     info = JSON.parse(body);
+    var temp = info['offices'];
+    var temp2 = info['officials']
+    var i;
+    for (i = 0; i < temp.length; i++) {
+      positions.push(temp[i]["name"])
+    }
 
-    console.log(info['officials'][1]);
+    for (i = 0; i < temp2.length-1; i++) {
+      try {
+        address.push(temp2[i]['address'][0]["line1"])
+      }
+      catch (err)
+      {
+        address.push("None")
+      }
+    }
+    // console.log(address);
+    // console.log(info);
   });
 }
 
@@ -238,20 +259,50 @@ function createData(id, date, name, shipTo, paymentMethod, amount) {
 }
 
 function getData(){
-  rows = [
-    createData(0, '16 Mar, 2019', 'Elvis Presley', 'Tupelo, MS', 'VISA ⠀•••• 3719', 312.44),
-    createData(1, '16 Mar, 2019', 'Paul McCartney', 'London, UK', 'VISA ⠀•••• 2574', 866.99),
-    createData(2, '16 Mar, 2019', 'Tom Scholz', 'Boston, MA', 'MC ⠀•••• 1253', 100.81),
-    createData(3, '16 Mar, 2019', 'Michael Jackson', 'Gary, IN', 'AMEX ⠀•••• 2000', 654.39),
-    createData(4, '15 Mar, 2019', 'Bruce Springsteen', 'Long Branch, NJ', 'VISA ⠀•••• 5919', 212.79),
-  ];
+  // rows = [
+  //   createData(0, info['officials'][0]['name'], positions[0], address[0], info['officials'][0]['phones'][0], ""),
+  //   createData(1, info['officials'][1]['name'], positions[1], address[1], info['officials'][1]['phones'][0], ""),
+  //   createData(2, info['officials'][2]['name'], positions[2], address[2], info['officials'][2]['phones'][0], ""),
+  //   createData(3, info['officials'][3]['name'], positions[3], address[3], info['officials'][3]['phones'][0], ""),
+  //   createData(4, info['officials'][4]['name'], positions[4], address[4], info['officials'][4]['phones'][0], ""),
+  // ];
+  var i;
+  console.log(info.length)
+  for (i=0; i<info['officials'].length; i++)
+  {
+    console.log("jere")
+    console.log(createData(i, info['officials'][i]['name'], positions[i], address[i], info['officials'][i]['phones'][0], ""))
+    rows.push(createData(i, info['officials'][i]['name'], positions[i], address[i], info['officials'][i]['phones'][0], ""))
+  }
 }
-
-
 
 function preventDefault(event) {
   event.preventDefault();
 }
+
+const useStyles3 = makeStyles({
+  depositContext: {
+    flex: 1,
+  },
+});
+
+function Deposits() {
+  const classes = useStyles3();
+  return (
+    <React.Fragment>
+      <Title>Current Address</Title>
+      <p>{currentAddress}</p>
+      <Title>Nearest Polling Location</Title>
+      {/*}
+      <Typography color="textSecondary" className={classes.depositContext}>
+        on 15 March, 2019
+      </Typography>
+    */}
+    </React.Fragment>
+  );
+}
+
+
 
 const useStyles2 = makeStyles((theme) => ({
   seeMore: {

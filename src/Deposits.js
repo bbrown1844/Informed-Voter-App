@@ -18,6 +18,7 @@ export default function Deposits() {
   const classes = useStyles();
   return (
     <React.Fragment>
+      <Title>Current Address</Title>
       <Title>Nearest Polling Location</Title>
       {/*}
       <Typography color="textSecondary" className={classes.depositContext}>
