@@ -303,9 +303,22 @@ async function handlePlaceSelect(updateQuery) {
           sec+=1
         }
       }
-      else if (temp[i]["name"].search("Attorney") == -1 )
+      else if (temp[i]["name"].search("Attorney") != -1 )
       {
+        tempDict['name'] = temp2[sec]['name'];
+        tempDict['pos'] = temp[i]["name"];
+        try{
+          tempDict['address'] = temp2[sec]['address'][0]["line1"];
+        }
+        catch (err)
+        {
+          tempDict['address'] = "None";
+        }
+        console.log("name", tempDict['name']);
+        console.log("name", tempDict['pos']);
 
+        Judicial.push(tempDict);
+        sec+=1;
       }
       else
       {
