@@ -16,6 +16,13 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import CreateIcon from '@material-ui/icons/Create';
 import GavelIcon from '@material-ui/icons/Gavel';
 import TimelineIcon from '@material-ui/icons/Timeline';
+import Link from '@material-ui/core/Link';
+
+
+// onClick = () => {
+//   // this.props.history comes from react router 
+//   this.props.history.push('/route1');
+// }
 
 export const mainListItems = (
   <div>
@@ -43,11 +50,13 @@ export const mainListItems = (
 export const secondaryListItems = (
   <div>
     <ListSubheader inset>Filters</ListSubheader>
-    <ListItem button>
+    <ListItem button >
       <ListItemIcon>
         <CreateIcon />
       </ListItemIcon>
-      <ListItemText primary="Legislation" />
+      <Link to="/signin">
+        <ListItemText primary="Legislation" />
+      </Link>
     </ListItem>
     <ListItem button>
       <ListItemIcon>

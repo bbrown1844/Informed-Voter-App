@@ -2,6 +2,7 @@ import React from 'react';
 import { useState, useEffect, useRef } from "react";
 import ReactDOM from 'react-dom';
 import { render } from 'react-dom';
+import Popup from "reactjs-popup";
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -25,7 +26,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import { mainListItems, secondaryListItems } from './listItems';
+// import { mainListItems, secondaryListItems } from './listItems';
 import Chart from './Chart';
 // import Deposits from './Deposits';
 // import Orders from './Orders';
@@ -42,6 +43,18 @@ import Avatar from '@material-ui/core/Avatar';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import GavelIcon from '@material-ui/icons/Gavel';
 import HowToVoteIcon from '@material-ui/icons/HowToVote';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import PeopleIcon from '@material-ui/icons/People';
+import BarChartIcon from '@material-ui/icons/BarChart';
+import LayersIcon from '@material-ui/icons/Layers';
+import AssignmentIcon from '@material-ui/icons/Assignment';
+import CreateIcon from '@material-ui/icons/Create';
+import TimelineIcon from '@material-ui/icons/Timeline';
 
 import {
   BrowserRouter as Router,
@@ -236,7 +249,9 @@ async function handlePlaceSelect(updateQuery) {
 
   request(options, function (error, response, body) {
     if (error) throw new Error(error);
+
     info = JSON.parse(body);
+
     var temp = info['offices'];
     var temp2 = info['officials'];
     var i = 0;
@@ -250,7 +265,7 @@ async function handlePlaceSelect(updateQuery) {
           tempDict['name'] = temp2[sec]['name'];
           tempDict['pos'] = "U.S. Senator";
           try{
-            tempDict['address'] = temp2[sec]['address'][0]["line1"]
+            tempDict['address'] = temp2[sec]['address'][0]["line1"];
           }
           catch (err)
           {
@@ -261,7 +276,7 @@ async function handlePlaceSelect(updateQuery) {
           tempDict['name'] = temp2[sec+1]['name'];
           tempDict['pos'] = "U.S. Senator";
           try{
-            tempDict['address'] = temp2[sec+1]['address'][0]["line1"]
+            tempDict['address'] = temp2[sec+1]['address'][0]["line1"];
           }
           catch (err)
           {
@@ -278,7 +293,7 @@ async function handlePlaceSelect(updateQuery) {
           tempDict['name'] = temp2[sec]['name'];
           tempDict['pos'] = "CA Supreme Court Justice";
           try{
-            tempDict['address'] = temp2[sec]['address'][0]["line1"]
+            tempDict['address'] = temp2[sec]['address'][0]["line1"];
           }
           catch (err)
           {
@@ -288,12 +303,16 @@ async function handlePlaceSelect(updateQuery) {
           sec+=1
         }
       }
+      else if (temp[i]["name"].search("Attorney") == -1 )
+      {
+
+      }
       else
       {
         tempDict['name'] = temp2[sec]['name'];
         tempDict['pos'] = temp[i]["name"];
         try{
-          tempDict['address'] = temp2[sec]['address'][0]["line1"]
+          tempDict['address'] = temp2[sec]['address'][0]["line1"];
         }
         catch (err)
         {
@@ -302,10 +321,11 @@ async function handlePlaceSelect(updateQuery) {
         Executive.push(tempDict);
         sec+=1;
       }
-      ++i
+      ++i;
     }
 
-    for (i = 0; i < temp2.length-1; i++) {
+    for (i = 0; i < temp2.length-1; i++) 
+    {
       try {
         address.push(temp2[i]['address'][0]["line1"]);
       }
@@ -315,16 +335,34 @@ async function handlePlaceSelect(updateQuery) {
       }
     }
     // console.log(address);
-    console.log(info);
-    console.log(Executive);
-    console.log(Judicial);
+    // console.log(info);
+    // console.log(Executive);
+    // console.log(Judicial);
+
+    var i;
+    for (i=0; i<Executive.length; i++)
+    {
+      exec_rows.push(createData(i, Executive[i]['name'], Executive[i]['pos'], Executive[i]['address'], info['officials'][i]['phones'][0], ""))
+    }
+    for (i=0; i<Judicial.length; i++)
+    {
+      jud_rows.push(createData(i, Judicial[i]['name'], Judicial[i]['pos'], Judicial[i]['address'], info['officials'][i]['phones'][0], ""))
+    }
+
+    // localStorage.setItem('exec_rows', exec_rows);
+    // localStorage.setItem('jud_rows', jud_rows);
+
+    var store = require('store')
+    store.set('exec', {name:exec_rows});
+    store.set('jud', {name:jud_rows});
 
   });
 
-  request(options2, function (error, response, body) {
-    if (error) throw new Error(error);
-    console.log(body)
-  });
+
+  // request(options2, function (error, response, body) {
+  //   if (error) throw new Error(error);
+  //   console.log(body)
+  // });
 }
 
 
@@ -345,26 +383,34 @@ function createData(id, date, name, shipTo, paymentMethod, amount) {
   return { id, date, name, shipTo, paymentMethod, amount };
 }
 
-function getData(){
-  // rows = [
-  //   createData(0, info['officials'][0]['name'], positions[0], address[0], info['officials'][0]['phones'][0], ""),
-  //   createData(1, info['officials'][1]['name'], positions[1], address[1], info['officials'][1]['phones'][0], ""),
-  //   createData(2, info['officials'][2]['name'], positions[2], address[2], info['officials'][2]['phones'][0], ""),
-  //   createData(3, info['officials'][3]['name'], positions[3], address[3], info['officials'][3]['phones'][0], ""),
-  //   createData(4, info['officials'][4]['name'], positions[4], address[4], info['officials'][4]['phones'][0], ""),
-  // ];
-  var i;
-  for (i=0; i<Executive.length; i++)
-  {
-    console.log(createData(i, info['officials'][i]['name'], positions[i], address[i], info['officials'][i]['phones'][0], ""))
-    exec_rows.push(createData(i, Executive[i]['name'], Executive[i]['pos'], Executive[i]['address'], info['officials'][i]['phones'][0], ""))
-  }
-  for (i=0; i<Judicial.length; i++)
-  {
-    console.log(createData(i, info['officials'][i]['name'], positions[i], address[i], info['officials'][i]['phones'][0], ""))
-    jud_rows.push(createData(i, Judicial[i]['name'], Judicial[i]['pos'], Judicial[i]['address'], info['officials'][i]['phones'][0], ""))
-  }
-}
+// function getData(){
+//   // rows = [
+//   //   createData(0, info['officials'][0]['name'], positions[0], address[0], info['officials'][0]['phones'][0], ""),
+//   //   createData(1, info['officials'][1]['name'], positions[1], address[1], info['officials'][1]['phones'][0], ""),
+//   //   createData(2, info['officials'][2]['name'], positions[2], address[2], info['officials'][2]['phones'][0], ""),
+//   //   createData(3, info['officials'][3]['name'], positions[3], address[3], info['officials'][3]['phones'][0], ""),
+//   //   createData(4, info['officials'][4]['name'], positions[4], address[4], info['officials'][4]['phones'][0], ""),
+//   // ];
+
+//   var i;
+//   for (i=0; i<Executive.length; i++)
+//   {
+//     console.log(createData(i, info['officials'][i]['name'], positions[i], address[i], info['officials'][i]['phones'][0], ""))
+//     exec_rows.push(createData(i, Executive[i]['name'], Executive[i]['pos'], Executive[i]['address'], info['officials'][i]['phones'][0], ""))
+//   }
+//   for (i=0; i<Judicial.length; i++)
+//   {
+//     console.log(createData(i, info['officials'][i]['name'], positions[i], address[i], info['officials'][i]['phones'][0], ""))
+//     jud_rows.push(createData(i, Judicial[i]['name'], Judicial[i]['pos'], Judicial[i]['address'], info['officials'][i]['phones'][0], ""))
+//   }
+
+//   localStorage.setItem('exec_rows', exec_rows);
+//   localStorage.setItem('jud_rows', jud_rows);
+
+//   var output = localStorage.getItem('exec_rows');
+//   console.log("here",output);
+
+// }
 
 function preventDefault(event) {
   event.preventDefault();
@@ -393,6 +439,61 @@ function Deposits() {
 }
 
 
+////////Listitems.js//////////
+export const mainListItems = (
+  <div>
+    <ListItem button>
+      <ListItemIcon>
+        <DashboardIcon />
+      </ListItemIcon>
+      <Link to="/">
+        <ListItemText primary="Home" />
+      </Link>
+    </ListItem>
+    <ListItem button>
+      <ListItemIcon>
+        <TimelineIcon />
+      </ListItemIcon>
+      <Link to="/timeline">
+        <ListItemText primary="Timeline" />
+      </Link>
+    </ListItem>
+    <ListItem button>
+      <ListItemIcon>
+        <PeopleIcon />
+      </ListItemIcon>
+      <Link to="/hierarchy">
+        <ListItemText primary="Hierarchy" />
+      </Link>
+    </ListItem>
+  </div>
+);
+
+export const secondaryListItems = (
+  <div>
+    <ListSubheader inset>Filters</ListSubheader>
+    <ListItem button >
+      <ListItemIcon>
+        <CreateIcon />
+      </ListItemIcon>
+        <ListItemText primary="Legislation" />
+    </ListItem>
+    <ListItem button>
+      <ListItemIcon>
+        <VerifiedUserIcon />
+      </ListItemIcon>
+      <ListItemText primary="Law Enforcement" />
+    </ListItem>
+    <ListItem button>
+      <ListItemIcon>
+        <GavelIcon />
+      </ListItemIcon>
+      <ListItemText primary="Judicial" />
+    </ListItem>
+  </div>
+);
+
+///////////////
 
 const useStyles2 = makeStyles((theme) => ({
   seeMore: {
@@ -402,9 +503,19 @@ const useStyles2 = makeStyles((theme) => ({
 
 function Orders() {
   const classes = useStyles2();
-  getData();
+  // var exec = localStorage.getItem('exec_rows');
+  // var jud = localStorage.getItem('jud_rows');
+  var store = require('store');
+  var exec = store.get('exec').name;
+  var jud = store.get('jud').name;
+
+  console.log( exec);
   return (
     <React.Fragment>
+    <Typography variant="h3" component="h3">
+      Representatives
+    </Typography> 
+    <br></br>
       <Avatar className={classes.avatar}>
         <AccountBalanceIcon />
       </Avatar>
@@ -421,10 +532,10 @@ function Orders() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {exec_rows.map((row) => (
+          {exec.map((row) => (
             <TableRow key={row.id}>
               <TableCell>{row.date}</TableCell>
-              <TableCell>{row.name}</TableCell>
+              <TableCell><Popup trigger={<button> {row.name}</button>} position="right center"></Popup></TableCell>
               <TableCell>{row.shipTo}</TableCell>
               <TableCell>{row.paymentMethod}</TableCell>
               <TableCell align="right">{row.amount}</TableCell>
@@ -450,10 +561,10 @@ function Orders() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {jud_rows.map((row) => (
+          {jud.map((row) => (
             <TableRow key={row.id}>
               <TableCell>{row.date}</TableCell>
-              <TableCell>{row.name}</TableCell>
+              <TableCell><Popup trigger={<button> {row.name}</button>} position="right center">This is a test</Popup></TableCell>
               <TableCell>{row.shipTo}</TableCell>
               <TableCell>{row.paymentMethod}</TableCell>
               <TableCell align="right">{row.amount}</TableCell>
@@ -490,11 +601,7 @@ function Orders() {
           ))}
         </TableBody>
       </Table>
-      <div className={classes.seeMore}>
-        <Link color="primary" href="#" onClick={preventDefault}>
-          See more orders
-        </Link>
-      </div>
+      
     </React.Fragment>
   );
 }
@@ -519,6 +626,12 @@ class App extends React.Component {
             </Route>
             <Route path="/signin">
               <SignIn />
+            </Route>
+            <Route path="/timeline">
+              <Timeline />
+            </Route>
+            <Route path="/hierarchy">
+              <Hierarchy />
             </Route>
           </Switch>
         </div>
@@ -587,22 +700,156 @@ function Dashboard() {
           <div className={classes.appBarSpacer} />
           <Container maxWidth="lg" className={classes.container}>
             <Grid container spacing={3}>
+              {/* Recent Orders */}
+              <Grid item xs={12}>
+                <Paper className={classes.paper}>
+                  <Orders/>
+                </Paper>
+              </Grid>
+            </Grid>
+            <Box pt={4}>
+              <Copyright />
+            </Box>
+          </Container>
+        </main>
+      </div>
+  );
+}
+
+function Timeline() {
+  const classes = useStyles();
+  const [open, setOpen] = React.useState(true);
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  const name = window.$name;
+
+  return (
+    <div className={classes.root}>
+        <CssBaseline />
+        <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
+          <Toolbar className={classes.toolbar}>
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+              Dashboard
+            </Typography>
+            <IconButton color="inherit">
+              <Badge badgeContent={4} color="secondary">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          variant="permanent"
+          classes={{
+            paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+          }}
+          open={open}
+        >
+          <div className={classes.toolbarIcon}>
+            <IconButton onClick={handleDrawerClose}>
+              <ChevronLeftIcon />
+            </IconButton>
+          </div>
+          <Divider />
+          <List>{mainListItems}</List>
+          <Divider />
+          <List>{secondaryListItems}</List>
+        </Drawer>
+        <main className={classes.content}>
+          <div className={classes.appBarSpacer} />
+          <Container maxWidth="lg" className={classes.container}>
+            <Grid container spacing={3}>
               {/* Chart */}
               <Grid item xs={12} md={8} lg={9}>
                 <Paper className={fixedHeightPaper}>
                   <Chart />
                 </Paper>
               </Grid>
+            </Grid>
+            <Box pt={4}>
+              <Copyright />
+            </Box>
+          </Container>
+        </main>
+      </div>
+  );
+}
+
+
+function Hierarchy() {
+  const classes = useStyles();
+  const [open, setOpen] = React.useState(true);
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  const name = window.$name;
+
+  return (
+    <div className={classes.root}>
+        <CssBaseline />
+        <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
+          <Toolbar className={classes.toolbar}>
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+              Dashboard
+            </Typography>
+            <IconButton color="inherit">
+              <Badge badgeContent={4} color="secondary">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          variant="permanent"
+          classes={{
+            paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+          }}
+          open={open}
+        >
+          <div className={classes.toolbarIcon}>
+            <IconButton onClick={handleDrawerClose}>
+              <ChevronLeftIcon />
+            </IconButton>
+          </div>
+          <Divider />
+          <List>{mainListItems}</List>
+          <Divider />
+        </Drawer>
+        <main className={classes.content}>
+          <div className={classes.appBarSpacer} />
+          <Container maxWidth="lg" className={classes.container}>
+            <Grid container spacing={3}>
               {/* Recent Deposits */}
               <Grid item xs={12} md={4} lg={3}>
                 <Paper className={fixedHeightPaper}>
                   <Deposits />
-                </Paper>
-              </Grid>
-              {/* Recent Orders */}
-              <Grid item xs={12}>
-                <Paper className={classes.paper}>
-                  <Orders/>
                 </Paper>
               </Grid>
             </Grid>
@@ -680,6 +927,8 @@ function SignIn() {
     </Container>
   );
 }
+
+function repsPage() {}
 
 // function SignIn() {
 //   const classes = useStyles();
