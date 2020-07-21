@@ -16,9 +16,11 @@
     "natives": "^1.1.6",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-icons": "^3.10.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-simple-maps": "^2.1.2",
+    "react-vertical-timeline-component": "^3.0.2",
     "reactjs-popup": "^1.5.0",
     "recharts": "^1.8.5",
     "store": "^2.0.12"

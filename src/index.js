@@ -55,7 +55,11 @@ import LayersIcon from '@material-ui/icons/Layers';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import CreateIcon from '@material-ui/icons/Create';
 import TimelineIcon from '@material-ui/icons/Timeline';
-
+import { VerticalTimeline, VerticalTimelineElement }  from 'react-vertical-timeline-component';
+import 'react-vertical-timeline-component/style.min.css';
+import AccessibleIcon from '@material-ui/icons/Accessible';
+import SchoolIcon from '@material-ui/icons/School';
+import StarIcon from '@material-ui/icons/Star';
 import {
   BrowserRouter as Router,
   Switch,
@@ -181,6 +185,7 @@ let autoComplete;
 let info;
 let Executive = [];
 let Judicial = [];
+let Law = [];
 let positions = [];
 let address = [];
 let currentAddress;
@@ -225,6 +230,9 @@ async function handlePlaceSelect(updateQuery) {
   // console.log(addressObject);
 
   currentAddress = addressObject.formatted_address;
+  var store = require('store')
+  store.set('current_addr', {addr:currentAddress});
+
 
   var request = require("request");
   var options = { method: 'GET',
@@ -272,6 +280,7 @@ async function handlePlaceSelect(updateQuery) {
             tempDict['address'] = "None";
           }
           Executive.push(tempDict);
+
           tempDict = {};
           tempDict['name'] = temp2[sec+1]['name'];
           tempDict['pos'] = "U.S. Senator";
@@ -285,7 +294,7 @@ async function handlePlaceSelect(updateQuery) {
           Executive.push(tempDict);
           sec+=2;
       }
-      else if (temp[i]["name"] == "CA Supreme Court Justice"){
+      else if (temp[i]["name"].search("Supreme Court Justice") != -1){
         var j;
         for (j=0; j<7; j++)
         {
@@ -303,7 +312,7 @@ async function handlePlaceSelect(updateQuery) {
           sec+=1
         }
       }
-      else if (temp[i]["name"].search("Attorney") != -1 )
+      else if ((temp[i]["name"].search("Attorney") != -1) || (temp[i]["name"].search("Public Defender") != -1))
       {
         tempDict['name'] = temp2[sec]['name'];
         tempDict['pos'] = temp[i]["name"];
@@ -314,10 +323,23 @@ async function handlePlaceSelect(updateQuery) {
         {
           tempDict['address'] = "None";
         }
-        console.log("name", tempDict['name']);
-        console.log("name", tempDict['pos']);
 
         Judicial.push(tempDict);
+        sec+=1;
+      }
+      else if (temp[i]["name"].search("Sheriff") != -1 )
+      {
+        tempDict['name'] = temp2[sec]['name'];
+        tempDict['pos'] = temp[i]["name"];
+        try{
+          tempDict['address'] = temp2[sec]['address'][0]["line1"];
+        }
+        catch (err)
+        {
+          tempDict['address'] = "None";
+        }
+
+        Law.push(tempDict);
         sec+=1;
       }
       else
@@ -361,6 +383,10 @@ async function handlePlaceSelect(updateQuery) {
     {
       jud_rows.push(createData(i, Judicial[i]['name'], Judicial[i]['pos'], Judicial[i]['address'], info['officials'][i]['phones'][0], ""))
     }
+    for (i=0; i<Law.length; i++)
+    {
+      law_rows.push(createData(i, Law[i]['name'], Law[i]['pos'], Law[i]['address'], info['officials'][i]['phones'][0], ""))
+    }
 
     // localStorage.setItem('exec_rows', exec_rows);
     // localStorage.setItem('jud_rows', jud_rows);
@@ -368,6 +394,8 @@ async function handlePlaceSelect(updateQuery) {
     var store = require('store')
     store.set('exec', {name:exec_rows});
     store.set('jud', {name:jud_rows});
+    store.set('law', {name:law_rows});
+
 
   });
 
@@ -437,10 +465,13 @@ const useStyles3 = makeStyles({
 
 function Deposits() {
   const classes = useStyles3();
+  var store = require('store');
+  var curr_addr = store.get('current_addr').addr;
+
   return (
     <React.Fragment>
-      <Title>Current Address</Title>
-      <p>{currentAddress}</p>
+      <Title>Current Location</Title>
+      <p>{curr_addr}</p>
       <Title>Nearest Polling Station</Title>
       {/*}
       <Typography color="textSecondary" className={classes.depositContext}>
@@ -521,8 +552,8 @@ function Orders() {
   var store = require('store');
   var exec = store.get('exec').name;
   var jud = store.get('jud').name;
+  var law = store.get('law').name;
 
-  console.log( exec);
   return (
     <React.Fragment>
     <Typography variant="h3" component="h3">
@@ -540,7 +571,7 @@ function Orders() {
             <TableCell>Name</TableCell>
             <TableCell>Position</TableCell>
             <TableCell>Address</TableCell>
-            <TableCell>Social Media</TableCell>
+            <TableCell>Contact</TableCell>
             <TableCell align="right">Re-Election</TableCell>
           </TableRow>
         </TableHead>
@@ -562,14 +593,14 @@ function Orders() {
         <GavelIcon />
       </Avatar>
       <br></br>
-      <Title>Judicial</Title>
+      <Title>Judicial and Criminal Justice</Title>
       <Table size="small">
         <TableHead>
           <TableRow>
             <TableCell>Name</TableCell>
             <TableCell>Position</TableCell>
             <TableCell>Address</TableCell>
-            <TableCell>Social Media</TableCell>
+            <TableCell>Contact</TableCell>
             <TableCell align="right">Re-Election</TableCell>
           </TableRow>
         </TableHead>
@@ -598,15 +629,15 @@ function Orders() {
             <TableCell>Name</TableCell>
             <TableCell>Position</TableCell>
             <TableCell>Address</TableCell>
-            <TableCell>Social Media</TableCell>
+            <TableCell>Contact</TableCell>
             <TableCell align="right">Re-Election</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {law_rows.map((row) => (
+          {law.map((row) => (
             <TableRow key={row.id}>
               <TableCell>{row.date}</TableCell>
-              <TableCell>{row.name}</TableCell>
+              <TableCell><Popup trigger={<button> {row.name}</button>} position="right center">This is a test</Popup></TableCell>
               <TableCell>{row.shipTo}</TableCell>
               <TableCell>{row.paymentMethod}</TableCell>
               <TableCell align="right">{row.amount}</TableCell>
@@ -729,7 +760,8 @@ function Dashboard() {
   );
 }
 
-function Timeline() {
+
+function Timeline(){
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -780,16 +812,15 @@ function Timeline() {
           <Divider />
           <List>{mainListItems}</List>
           <Divider />
-          <List>{secondaryListItems}</List>
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
           <Container maxWidth="lg" className={classes.container}>
             <Grid container spacing={3}>
-              {/* Chart */}
-              <Grid item xs={12} md={8} lg={9}>
-                <Paper className={fixedHeightPaper}>
-                  <Chart />
+              {/* Recent Orders */}
+              <Grid item xs={12}>
+                <Paper className={classes.paper}>
+                  <TimelineComponent/>
                 </Paper>
               </Grid>
             </Grid>
@@ -799,6 +830,105 @@ function Timeline() {
           </Container>
         </main>
       </div>
+  );
+
+}
+
+function TimelineComponent() {
+  return(
+    <VerticalTimeline>
+  <VerticalTimelineElement
+    className="vertical-timeline-element--work"
+    contentStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
+    contentArrowStyle={{ borderRight: '7px solid  rgb(33, 150, 243)' }}
+    date="2011 - present"
+    iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
+    icon={<AccessibleIcon />}
+  >
+    <h3 className="vertical-timeline-element-title">Creative Director</h3>
+    <h4 className="vertical-timeline-element-subtitle">Miami, FL</h4>
+    <p>
+      Creative Direction, User Experience, Visual Design, Project Management, Team Leading
+    </p>
+  </VerticalTimelineElement>
+  <VerticalTimelineElement
+    className="vertical-timeline-element--work"
+    date="2010 - 2011"
+    iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
+    icon={<AccessibleIcon />}
+  >
+    <h3 className="vertical-timeline-element-title">Art Director</h3>
+    <h4 className="vertical-timeline-element-subtitle">San Francisco, CA</h4>
+    <p>
+      Creative Direction, User Experience, Visual Design, SEO, Online Marketing
+    </p>
+  </VerticalTimelineElement>
+  <VerticalTimelineElement
+    className="vertical-timeline-element--work"
+    date="2008 - 2010"
+    iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
+    icon={<AccessibleIcon />}
+  >
+    <h3 className="vertical-timeline-element-title">Web Designer</h3>
+    <h4 className="vertical-timeline-element-subtitle">Los Angeles, CA</h4>
+    <p>
+      User Experience, Visual Design
+    </p>
+  </VerticalTimelineElement>
+  <VerticalTimelineElement
+    className="vertical-timeline-element--work"
+    date="2006 - 2008"
+    iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
+    icon={<AccessibleIcon />}
+  >
+    <h3 className="vertical-timeline-element-title">Web Designer</h3>
+    <h4 className="vertical-timeline-element-subtitle">San Francisco, CA</h4>
+    <p>
+      User Experience, Visual Design
+    </p>
+  </VerticalTimelineElement>
+  <VerticalTimelineElement
+    className="vertical-timeline-element--education"
+    date="April 2013"
+    iconStyle={{ background: 'rgb(233, 30, 99)', color: '#fff' }}
+    icon={<SchoolIcon />}
+  >
+    <h3 className="vertical-timeline-element-title">Content Marketing for Web, Mobile and Social Media</h3>
+    <h4 className="vertical-timeline-element-subtitle">Online Course</h4>
+    <p>
+      Strategy, Social Media
+    </p>
+  </VerticalTimelineElement>
+  <VerticalTimelineElement
+    className="vertical-timeline-element--education"
+    date="November 2012"
+    iconStyle={{ background: 'rgb(233, 30, 99)', color: '#fff' }}
+    icon={<SchoolIcon />}
+  >
+    <h3 className="vertical-timeline-element-title">Agile Development Scrum Master</h3>
+    <h4 className="vertical-timeline-element-subtitle">Certification</h4>
+    <p>
+      Creative Direction, User Experience, Visual Design
+    </p>
+  </VerticalTimelineElement>
+  <VerticalTimelineElement
+    className="vertical-timeline-element--education"
+    date="2002 - 2006"
+    iconStyle={{ background: 'rgb(233, 30, 99)', color: '#fff' }}
+    icon={<SchoolIcon />}
+  >
+    <h3 className="vertical-timeline-element-title">Bachelor of Science in Interactive Digital Media Visual Imaging</h3>
+    <h4 className="vertical-timeline-element-subtitle">Bachelor Degree</h4>
+    <p>
+      Creative Direction, Visual Design
+    </p>
+  </VerticalTimelineElement>
+  <VerticalTimelineElement
+    iconStyle={{ background: 'rgb(16, 204, 82)', color: '#fff' }}
+    icon={<StarIcon />}
+  />
+</VerticalTimeline>
+
   );
 }
 
