@@ -60,6 +60,11 @@ import 'react-vertical-timeline-component/style.min.css';
 import AccessibleIcon from '@material-ui/icons/Accessible';
 import SchoolIcon from '@material-ui/icons/School';
 import StarIcon from '@material-ui/icons/Star';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
+import { FlowChartWithState } from "@mrblenny/react-flow-chart";
+import styled, { css } from 'styled-components'
+
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -510,12 +515,44 @@ export const mainListItems = (
         <ListItemText primary="Hierarchy" />
       </Link>
     </ListItem>
+    <ListItem button>
+      <ListItemIcon>
+        <LocationOnIcon />
+      </ListItemIcon>
+      <Link to="/location">
+        <ListItemText primary="Location" />
+      </Link>
+    </ListItem>
   </div>
 );
 
 export const secondaryListItems = (
   <div>
     <ListSubheader inset>Filters</ListSubheader>
+    <ListItem button >
+      <ListItemIcon>
+        <CreateIcon />
+      </ListItemIcon>
+        <ListItemText primary="Legislation" />
+    </ListItem>
+    <ListItem button>
+      <ListItemIcon>
+        <VerifiedUserIcon />
+      </ListItemIcon>
+      <ListItemText primary="Law Enforcement" />
+    </ListItem>
+    <ListItem button>
+      <ListItemIcon>
+        <GavelIcon />
+      </ListItemIcon>
+      <ListItemText primary="Judicial" />
+    </ListItem>
+  </div>
+);
+
+export const hierarchyListItems = (
+  <div>
+    <ListSubheader inset>Select One</ListSubheader>
     <ListItem button >
       <ListItemIcon>
         <CreateIcon />
@@ -556,9 +593,18 @@ function Orders() {
 
   return (
     <React.Fragment>
+    {/*
     <Typography variant="h3" component="h3">
       Representatives
     </Typography> 
+  */}
+    <AppBar position="static">
+      <Toolbar>
+        <Typography variant="h5" className={classes.title}>
+          Representatives
+        </Typography>
+      </Toolbar>
+    </AppBar>
     <br></br>
       <Avatar className={classes.avatar}>
         <AccountBalanceIcon />
@@ -618,8 +664,8 @@ function Orders() {
       </Table>
       <br></br>
 
-      <Avatar className={classes.avatar}>
-        <VerifiedUserIcon />
+      <Avatar>
+        <VerifiedUserIcon/>
       </Avatar>
       <br></br>
       <Title>Law Enforcement</Title>
@@ -676,6 +722,9 @@ class App extends React.Component {
             </Route>
             <Route path="/hierarchy">
               <Hierarchy />
+            </Route>
+            <Route path="/location">
+              <Location />
             </Route>
           </Switch>
         </div>
@@ -738,7 +787,6 @@ function Dashboard() {
           <Divider />
           <List>{mainListItems}</List>
           <Divider />
-          <List>{secondaryListItems}</List>
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
@@ -812,6 +860,7 @@ function Timeline(){
           <Divider />
           <List>{mainListItems}</List>
           <Divider />
+          <List>{secondaryListItems}</List>
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
@@ -833,6 +882,7 @@ function Timeline(){
   );
 
 }
+
 
 function TimelineComponent() {
   return(
@@ -932,8 +982,197 @@ function TimelineComponent() {
   );
 }
 
+const Outer = styled.div`
+  padding: 30px;
+`
+
+const Input = styled.input`
+  padding: 10px;
+  border: 1px solid cornflowerblue;
+  width: 100%;
+`
+const DarkBox = styled.div`
+  position: absolute;
+  width: 300px;
+  height: 150px;
+  padding: 30px;
+  background: #3e3e3e;
+  color: white;
+  border-radius: 10px;
+`
+/**
+ * Create the custom component,
+ * Make sure it has the same prop signature
+ */
+const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
+  if (node.type === 'output-only') {
+    return (
+      <DarkBox>
+        <p>Use Node inner to customise the content of the node</p>
+      </DarkBox>
+    )
+  } else {
+    return (
+      <Outer>
+        <p>Add custom displays for each node.type</p>
+        <p>You may need to stop event propagation so your forms work.</p>
+        <br />
+        <Input
+          type="number"
+          placeholder="Some Input"
+          onChange={(e) => console.log(e)}
+          onClick={(e) => e.stopPropagation()}
+          onMouseUp={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
+        />
+      </Outer>
+    )
+  }
+}
+
+const lawChart = {
+  offset: {
+    x: -500,
+    y: -850
+  },
+  nodes: {
+    node1: {
+      id: "node1",
+      type: "output-only",
+      position: {
+        x: 1000,
+        y: 1000
+      },
+      ports: {
+        port1: {
+          id: "port1",
+          type: "output",
+          properties: {
+            value: "no"
+          }
+        }
+      }
+    },
+    node2: {
+      id: "node2",
+      type: "input-output",
+      position: {
+        x: 1500,
+        y: 1000
+      },
+      ports: {
+        port1: {
+          id: "port1",
+          type: "input"
+        },
+        port2: {
+          id: "port2",
+          type: "output"
+        }
+      }
+    },
+  },
+  links: {
+    link1: {
+      id: "link1",
+      from: {
+        nodeId: "node1",
+        portId: "port1"
+      },
+      to: {
+        nodeId: "node2",
+        portId: "port1"
+      },
+    },
+  },
+  selected: {},
+  hovered: {}
+};
+
 
 function Hierarchy() {
+  const classes = useStyles();
+  const [open, setOpen] = React.useState(true);
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  const name = window.$name;
+
+  //Inner Node
+
+  return (
+    <div className={classes.root}>
+        <CssBaseline />
+        <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
+          <Toolbar className={classes.toolbar}>
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+              Dashboard
+            </Typography>
+            <IconButton color="inherit">
+              <Badge badgeContent={4} color="secondary">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          variant="permanent"
+          classes={{
+            paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+          }}
+          open={open}
+        >
+          <div className={classes.toolbarIcon}>
+            <IconButton onClick={handleDrawerClose}>
+              <ChevronLeftIcon />
+            </IconButton>
+          </div>
+          <Divider />
+          <List>{mainListItems}</List>
+          <Divider />
+          <List>{hierarchyListItems}</List>
+        </Drawer>
+        <main className={classes.content}>
+          <div className={classes.appBarSpacer} />
+          <Container maxWidth="lg" className={classes.container}>
+            <Grid container spacing={3}>
+              {/* Recent Deposits */}
+              <Grid item xs={12}>
+              <AppBar position="static">
+                <Toolbar>
+                  <Typography variant="h6" className={classes.title}>
+                    News
+                  </Typography>
+                </Toolbar>
+              </AppBar>
+                <Paper>
+                  <FlowChartWithState config={{ readonly: true ,smartRouting: true }} initialValue={lawChart} Components={{NodeInner: NodeInnerCustom}}/>
+                </Paper>
+              </Grid>
+            </Grid>
+            <Box pt={4}>
+              <Copyright />
+            </Box>
+          </Container>
+        </main>
+      </div>
+  );
+}
+
+function Location() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
