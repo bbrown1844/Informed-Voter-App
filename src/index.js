@@ -63,6 +63,11 @@ import StarIcon from '@material-ui/icons/Star';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import { FlowChartWithState } from "@mrblenny/react-flow-chart";
 import styled, { css } from 'styled-components'
+import Card, { CardHeader } from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardMedia from '@material-ui/core/CardMedia';
 
 
 import {
@@ -993,6 +998,16 @@ const Input = styled.input`
 `
 const DarkBox = styled.div`
   position: absolute;
+  width: 2440px;
+  height: 30px;
+  padding: 5px;
+  background: #3e3e3e;
+  color: white;
+  border-radius: 10px;
+`
+
+const govType = styled.div`
+  position: absolute;
   width: 300px;
   height: 150px;
   padding: 30px;
@@ -1004,14 +1019,319 @@ const DarkBox = styled.div`
  * Create the custom component,
  * Make sure it has the same prop signature
  */
+
+ const useStylesCard = makeStyles({
+  root: {
+    minWidth: 275,
+  },
+  bullet: {
+    display: 'inline-block',
+    margin: '0 2px',
+    transform: 'scale(0.8)',
+  },
+  title: {
+    fontSize: 14,
+  },
+  pos: {
+    marginBottom: 12,
+  },
+});
+
+
+
 const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
-  if (node.type === 'output-only') {
+  const classes = useStylesCard();
+  const bull = <span className={classes.bullet}>•</span>;
+
+  if (node.type === 'Pres')
+  {
+    return (
+      <Outer>
+        <Card className={classes.root}>
+        <CardActionArea>
+          <CardMedia
+            className={classes.media}
+            image="images/flag.png"
+            title="Contemplative Reptile"
+          />
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="h2">
+              President of the United States
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="p">
+              Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
+              across all continents except Antarctica
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+        <CardActions>
+          <Button size="small" color="Secondary">
+            Federal
+          </Button>
+        </CardActions>
+        </Card>
+      </Outer>
+    )
+  }
+  else if (node.type === 'US Att') {
+    return (
+      <Outer>
+      <Card className={classes.root}>
+      <CardActionArea>
+        <CardMedia
+          className={classes.media}
+          image="images/flag.png"
+          title="Contemplative Reptile"
+        />
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="h2">
+            United States Attorney General
+          </Typography>
+          <Typography variant="body2" color="textSecondary" component="p">
+            Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
+            across all continents except Antarctica
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+      <CardActions>
+        <Button size="small" color="Secondary">
+          Federal
+        </Button>
+        <GavelIcon/>
+      </CardActions>
+    </Card>
+      </Outer>
+    )
+  } 
+  else if (node.type === 'DOJ')
+  {
+    return (
+      <Outer>
+      <Card className={classes.root}>
+      <CardActionArea>
+        <CardMedia
+          className={classes.media}
+          image="images/flag.png"
+          title="Contemplative Reptile"
+        />
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="h2">
+            Department of Justice
+          </Typography>
+          <Typography variant="body2" color="textSecondary" component="p">
+            Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
+            across all continents except Antarctica
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+      <CardActions>
+        <Button size="small" color="Secondary">
+          Federal
+        </Button>
+      </CardActions>
+    </Card>
+      </Outer>
+    )
+  }
+  else if (node.type === 'FBI')
+  {
+    return (
+      <Outer>
+        <Card className={classes.root}>
+          <CardActionArea>
+            <CardMedia
+              className={classes.media}
+              image="images/flag.png"
+              title="Contemplative Reptile"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="h2">
+                FBI
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+          <CardActions>
+            <Button size="small" color="Secondary">
+              Federal
+            </Button>
+          </CardActions>
+        </Card>
+      </Outer>
+    )
+  }
+  else if (node.type === 'USMS')
+  {
+    return (
+      <Outer>
+        <Card className={classes.root}>
+          <CardActionArea>
+            <CardMedia
+              className={classes.media}
+              image="images/flag.png"
+              title="Contemplative Reptile"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="h2">
+                USMS
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+          <CardActions>
+            <Button size="small" color="Secondary">
+              Federal
+            </Button>
+          </CardActions>
+        </Card>
+      </Outer>
+    )
+  }
+  else if (node.type === 'ATF')
+  {
+    return (
+      <Outer>
+        <Card className={classes.root}>
+          <CardActionArea>
+            <CardMedia
+              className={classes.media}
+              image="images/flag.png"
+              title="Contemplative Reptile"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="h2">
+                ATF
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+          <CardActions>
+            <Button size="small" color="Secondary">
+              Federal
+            </Button>
+          </CardActions>
+        </Card>
+      </Outer>
+    )
+  }
+  else if (node.type === 'DEA')
+  {
+    return (
+      <Outer>
+        <Card className={classes.root}>
+          <CardActionArea>
+            <CardMedia
+              className={classes.media}
+              image="images/flag.png"
+              title="Contemplative Reptile"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="h2">
+                DEA
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+          <CardActions>
+            <Button size="small" color="Secondary">
+              Federal
+            </Button>
+          </CardActions>
+        </Card>
+      </Outer>
+    )
+  }
+  else if (node.type === 'HC')
+  {
+    return (
+      <Outer>
+        <Card className={classes.root}>
+          <CardActionArea>
+            <CardMedia
+              className={classes.media}
+              image="images/flag.png"
+              title="Contemplative Reptile"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="h2">
+                Homeland Security
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+          <CardActions>
+            <Button size="small" color="Secondary">
+              Federal
+            </Button>
+          </CardActions>
+        </Card>
+      </Outer>
+    )
+  }
+  else if (node.type === 'ICE')
+  {
+    return (
+      <Outer>
+        <Card className={classes.root}>
+          <CardActionArea>
+            <CardMedia
+              className={classes.media}
+              image="images/flag.png"
+              title="Contemplative Reptile"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="h2">
+                ICE
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+          <CardActions>
+            <Button size="small" color="Secondary">
+              Federal
+            </Button>
+          </CardActions>
+        </Card>
+      </Outer>
+    )
+  }
+  else if (node.type === 'CIA')
+  {
+    return (
+      <Outer>
+        <Card className={classes.root}>
+          <CardActionArea>
+            <CardMedia
+              className={classes.media}
+              image="images/flag.png"
+              title="Contemplative Reptile"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="h2">
+                CIA
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+          <CardActions>
+            <Button size="small" color="Secondary">
+              Federal
+            </Button>
+          </CardActions>
+        </Card>
+      </Outer>
+    )
+  }
+  else if (node.type === 'State')
+  {
     return (
       <DarkBox>
-        <p>Use Node inner to customise the content of the node</p>
+        State
       </DarkBox>
     )
-  } else {
+  }
+  else if (node.type === 'fed')
+  {
+    return (
+      <DarkBox>
+        Federal
+      </DarkBox>
+    )
+  }
+  else if (node.type == 'Special'){
     return (
       <Outer>
         <p>Add custom displays for each node.type</p>
@@ -1028,60 +1348,275 @@ const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
       </Outer>
     )
   }
+  else{
+    return (
+      <Outer>
+        <p>President of the United States</p>
+      </Outer>
+    )
+  }
 }
+
+var x_val = 500;
+var y_val = 800;
 
 const lawChart = {
   offset: {
-    x: -500,
-    y: -850
+    x: -800,
+    y: -750
   },
   nodes: {
     node1: {
       id: "node1",
-      type: "output-only",
+      type: "US Att",
       position: {
-        x: 1000,
-        y: 1000
+        x: 1300,
+        y: y_val+=250
       },
       ports: {
         port1: {
           id: "port1",
           type: "output",
           properties: {
-            value: "no"
+            value: "yes"
+          }
+        },
+        port2: {
+          id: "port2",
+          type: "output",
+          properties: {
+            value: "yes"
           }
         }
       }
     },
     node2: {
       id: "node2",
-      type: "input-output",
+      type: "Pres",
       position: {
-        x: 1500,
-        y: 1000
+        x: 1300,
+        y: 800
       },
       ports: {
         port1: {
           id: "port1",
-          type: "input"
-        },
-        port2: {
-          id: "port2",
           type: "output"
         }
       }
     },
+    node3: {
+      id: "node3",
+      type: "DOJ",
+      position: {
+        x: 700,
+        y: y_val+=250
+      },
+      ports: {
+        port1: {
+          id: "port1",
+          type: "output"
+        },
+        port2: {
+          id: "port2",
+          type: "output"
+        },
+      }
+    },
+    node4: {
+      id: "node4",
+      type: "FBI",
+      position: {
+        x: x_val,
+        y: 1600
+      },
+      ports: {
+        port1: {
+          id: "port1",
+          type: "output"
+        },
+        port2: {
+          id: "port2",
+          type: "output"
+        },
+      }
+    },
+    node5: {
+      id: "node5",
+      type: "USMS",
+      position: {
+        x: x_val+=350,
+        y: 1600
+      },
+      ports: {
+        port1: {
+          id: "port1",
+          type: "output"
+        },
+        port2: {
+          id: "port2",
+          type: "output"
+        },
+      }
+    },
+    node6: {
+      id: "node6",
+      type: "ATF",
+      position: {
+        x: x_val+=350,
+        y: 1600
+      },
+      ports: {
+        port1: {
+          id: "port1",
+          type: "output"
+        },
+        port2: {
+          id: "port2",
+          type: "output"
+        },
+      }
+    },
+    node7: {
+      id: "node7",
+      type: "DEA",
+      position: {
+        x: x_val+=350,
+        y: 1600
+      },
+      ports: {
+        port1: {
+          id: "port1",
+          type: "output"
+        },
+        port2: {
+          id: "port2",
+          type: "output"
+        },
+      }
+    },
+    node8: {
+      id: "node8",
+      type: "HC",
+      position: {
+        x: x_val+=350,
+        y: 1600
+      },
+      ports: {
+        port1: {
+          id: "port1",
+          type: "output"
+        },
+        port2: {
+          id: "port2",
+          type: "output"
+        },
+      }
+    },
+    node9: {
+      id: "node9",
+      type: "ICE",
+      position: {
+        x: x_val+=350,
+        y: 1600
+      },
+      ports: {
+        port1: {
+          id: "port1",
+          type: "output"
+        },
+        port2: {
+          id: "port2",
+          type: "output"
+        },
+      }
+    },
+    node10: {
+      id: "node10",
+      type: "CIA",
+      position: {
+        x: x_val+=350,
+        y: 1600
+      },
+      ports: {
+        port1: {
+          id: "port1",
+          type: "output"
+        },
+        port2: {
+          id: "port2",
+          type: "output"
+        },
+      }
+    },
+    
+  
   },
+  
   links: {
     link1: {
       id: "link1",
       from: {
         nodeId: "node1",
-        portId: "port1"
+        portId: "port2"
       },
       to: {
         nodeId: "node2",
         portId: "port1"
+      },
+    },
+    link2: {
+      id: "link2",
+      from: {
+        nodeId: "node1",
+        portId: "port1"
+      },
+      to: {
+        nodeId: "node3",
+        portId: "port1"
+      },
+    },
+    link3: {
+      id: "link3",
+      from: {
+        nodeId: "node4",
+        portId: "port2"
+      },
+      to: {
+        nodeId: "node3",
+        portId: "port1"
+      },
+    },
+    link4: {
+      id: "link4",
+      from: {
+        nodeId: "node5",
+        portId: "port2"
+      },
+      to: {
+        nodeId: "node3",
+        portId: "port2"
+      },
+    },
+    link5: {
+      id: "link5",
+      from: {
+        nodeId: "node6",
+        portId: "port1"
+      },
+      to: {
+        nodeId: "node3",
+        portId: "port2"
+      },
+    },
+    link6: {
+      id: "link6",
+      from: {
+        nodeId: "node7",
+        portId: "port1"
+      },
+      to: {
+        nodeId: "node3",
+        portId: "port2"
       },
     },
   },
@@ -1154,12 +1689,12 @@ function Hierarchy() {
               <AppBar position="static">
                 <Toolbar>
                   <Typography variant="h6" className={classes.title}>
-                    News
+                    Hierarchy
                   </Typography>
                 </Toolbar>
               </AppBar>
                 <Paper>
-                  <FlowChartWithState config={{ readonly: true ,smartRouting: true }} initialValue={lawChart} Components={{NodeInner: NodeInnerCustom}}/>
+                  <FlowChartWithState config={{ readonly: true , smartRouting: true}} initialValue={lawChart} Components={{NodeInner: NodeInnerCustom}}/>
                 </Paper>
               </Grid>
             </Grid>
@@ -1171,6 +1706,8 @@ function Hierarchy() {
       </div>
   );
 }
+
+
 
 function Location() {
   const classes = useStyles();
