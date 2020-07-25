@@ -266,6 +266,39 @@ async function handlePlaceSelect(updateQuery) {
      } 
   };
 
+  var myJsonElection;
+  var response;
+
+  // response = await fetch('https://www.googleapis.com/civicinfo/v2/elections?key=AIzaSyDbh-xo-acZhcEKNlr9IuG6TGaA-8UI3Ys', {returnAllAvailableData:'true' });
+  // myJsonElection = await response.json();
+  // console.log("sdfsd", myJsonElection);
+
+  response = await fetch('https://api.wevoteusa.org/apis/v1/electionsRetrieve/');
+  myJsonElection = await response.json();
+  // console.log("sdfsd", myJsonElection['election_list'][0]);
+  // console.log("sdfsd", myJsonElection['election_list'][1]);
+  // console.log("sdfsd", myJsonElection['election_list'][2]);
+  // console.log("sdfsd", myJsonElection['election_list'][3]);
+  // console.log("sdfsd", myJsonElection['election_list'][4]);
+  // console.log("sdfsd", myJsonElection['election_list'][5]);
+
+  var listElect = myJsonElection['election_list'];
+  var CAElections = [];
+
+  console.log(listElect);
+  function checkAdult(stateUS) {
+    return stateUS == "CA";
+  }
+
+  // for (var i=0; i<listElect.length; i++)
+  // {
+  //   if (listElect[i]['state_code_list'].find(checkAdult))
+  //   {
+  //     CAElections.push(listElect[i]);
+  //     console.log(listElect[i]);
+  //   }
+  // }
+
   request(options, function (error, response, body) {
     if (error) throw new Error(error);
 
@@ -290,11 +323,19 @@ async function handlePlaceSelect(updateQuery) {
           {
             tempDict['address'] = "None";
           }
+
+          if (temp2[sec]['name'] == "Kamala D. Harris")
+          {
+            tempDict['re-election'] = "Nov 8, 2022";
+          }
+
           Executive.push(tempDict);
 
           tempDict = {};
           tempDict['name'] = temp2[sec+1]['name'];
           tempDict['pos'] = "U.S. Senator";
+          tempDict['re-election'] = "Nov 6, 2025";
+
           try{
             tempDict['address'] = temp2[sec+1]['address'][0]["line1"];
           }
@@ -314,6 +355,7 @@ async function handlePlaceSelect(updateQuery) {
           tempDict['pos'] = "CA Supreme Court Justice";
           try{
             tempDict['address'] = temp2[sec]['address'][0]["line1"];
+            tempDict['re-election'] = "Nominated by Governor";
           }
           catch (err)
           {
@@ -327,6 +369,7 @@ async function handlePlaceSelect(updateQuery) {
       {
         tempDict['name'] = temp2[sec]['name'];
         tempDict['pos'] = temp[i]["name"];
+        tempDict['re-election'] = "2022";
         try{
           tempDict['address'] = temp2[sec]['address'][0]["line1"];
         }
@@ -344,6 +387,7 @@ async function handlePlaceSelect(updateQuery) {
         tempDict['pos'] = temp[i]["name"];
         try{
           tempDict['address'] = temp2[sec]['address'][0]["line1"];
+          tempDict['re-election'] = "2022";
         }
         catch (err)
         {
@@ -352,6 +396,22 @@ async function handlePlaceSelect(updateQuery) {
 
         Law.push(tempDict);
         sec+=1;
+      }
+      else if (temp[i]["name"].search("President") != -1 || temp[i]["name"].search("Vice President") != -1)
+      {
+        tempDict['name'] = temp2[sec]['name'];
+        tempDict['pos'] = temp[i]["name"];
+        tempDict ['re-election'] = "Nov 3, 2020";
+        try{
+          tempDict['address'] = temp2[sec]['address'][0]["line1"];
+        }
+        catch (err)
+        {
+          tempDict['address'] = "None";
+        }
+        Executive.push(tempDict);
+        sec+=1;
+
       }
       else
       {
@@ -388,15 +448,15 @@ async function handlePlaceSelect(updateQuery) {
     var i;
     for (i=0; i<Executive.length; i++)
     {
-      exec_rows.push(createData(i, Executive[i]['name'], Executive[i]['pos'], Executive[i]['address'], info['officials'][i]['phones'][0], ""))
+      exec_rows.push(createData(i, Executive[i]['name'], Executive[i]['pos'], Executive[i]['address'], info['officials'][i]['phones'][0], Executive[i]['re-election']))
     }
     for (i=0; i<Judicial.length; i++)
     {
-      jud_rows.push(createData(i, Judicial[i]['name'], Judicial[i]['pos'], Judicial[i]['address'], info['officials'][i]['phones'][0], ""))
+      jud_rows.push(createData(i, Judicial[i]['name'], Judicial[i]['pos'], Judicial[i]['address'], info['officials'][i]['phones'][0], Judicial[i]['re-election']))
     }
     for (i=0; i<Law.length; i++)
     {
-      law_rows.push(createData(i, Law[i]['name'], Law[i]['pos'], Law[i]['address'], info['officials'][i]['phones'][0], ""))
+      law_rows.push(createData(i, Law[i]['name'], Law[i]['pos'], Law[i]['address'], info['officials'][i]['phones'][0], Law[i]['re-election']))
     }
 
     // localStorage.setItem('exec_rows', exec_rows);
@@ -771,11 +831,6 @@ function Dashboard() {
             <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
               Dashboard
             </Typography>
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
           </Toolbar>
         </AppBar>
         <Drawer
@@ -844,11 +899,6 @@ function Timeline(){
             <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
               Dashboard
             </Typography>
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
           </Toolbar>
         </AppBar>
         <Drawer
@@ -893,97 +943,101 @@ function Timeline(){
 function TimelineComponent() {
   return(
     <VerticalTimeline>
-  <VerticalTimelineElement
-    className="vertical-timeline-element--work"
-    contentStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
-    contentArrowStyle={{ borderRight: '7px solid  rgb(33, 150, 243)' }}
-    date="2011 - present"
-    iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
-    icon={<AccessibleIcon />}
-  >
-    <h3 className="vertical-timeline-element-title">Creative Director</h3>
-    <h4 className="vertical-timeline-element-subtitle">Miami, FL</h4>
-    <p>
-      Creative Direction, User Experience, Visual Design, Project Management, Team Leading
-    </p>
-  </VerticalTimelineElement>
-  <VerticalTimelineElement
-    className="vertical-timeline-element--work"
-    date="2010 - 2011"
-    iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
-    icon={<AccessibleIcon />}
-  >
-    <h3 className="vertical-timeline-element-title">Art Director</h3>
-    <h4 className="vertical-timeline-element-subtitle">San Francisco, CA</h4>
-    <p>
-      Creative Direction, User Experience, Visual Design, SEO, Online Marketing
-    </p>
-  </VerticalTimelineElement>
-  <VerticalTimelineElement
-    className="vertical-timeline-element--work"
-    date="2008 - 2010"
-    iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
-    icon={<AccessibleIcon />}
-  >
-    <h3 className="vertical-timeline-element-title">Web Designer</h3>
-    <h4 className="vertical-timeline-element-subtitle">Los Angeles, CA</h4>
-    <p>
-      User Experience, Visual Design
-    </p>
-  </VerticalTimelineElement>
-  <VerticalTimelineElement
-    className="vertical-timeline-element--work"
-    date="2006 - 2008"
-    iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
-    icon={<AccessibleIcon />}
-  >
-    <h3 className="vertical-timeline-element-title">Web Designer</h3>
-    <h4 className="vertical-timeline-element-subtitle">San Francisco, CA</h4>
-    <p>
-      User Experience, Visual Design
-    </p>
-  </VerticalTimelineElement>
-  <VerticalTimelineElement
-    className="vertical-timeline-element--education"
-    date="April 2013"
-    iconStyle={{ background: 'rgb(233, 30, 99)', color: '#fff' }}
-    icon={<SchoolIcon />}
-  >
-    <h3 className="vertical-timeline-element-title">Content Marketing for Web, Mobile and Social Media</h3>
-    <h4 className="vertical-timeline-element-subtitle">Online Course</h4>
-    <p>
-      Strategy, Social Media
-    </p>
-  </VerticalTimelineElement>
-  <VerticalTimelineElement
-    className="vertical-timeline-element--education"
-    date="November 2012"
-    iconStyle={{ background: 'rgb(233, 30, 99)', color: '#fff' }}
-    icon={<SchoolIcon />}
-  >
-    <h3 className="vertical-timeline-element-title">Agile Development Scrum Master</h3>
-    <h4 className="vertical-timeline-element-subtitle">Certification</h4>
-    <p>
-      Creative Direction, User Experience, Visual Design
-    </p>
-  </VerticalTimelineElement>
-  <VerticalTimelineElement
-    className="vertical-timeline-element--education"
-    date="2002 - 2006"
-    iconStyle={{ background: 'rgb(233, 30, 99)', color: '#fff' }}
-    icon={<SchoolIcon />}
-  >
-    <h3 className="vertical-timeline-element-title">Bachelor of Science in Interactive Digital Media Visual Imaging</h3>
-    <h4 className="vertical-timeline-element-subtitle">Bachelor Degree</h4>
-    <p>
-      Creative Direction, Visual Design
-    </p>
-  </VerticalTimelineElement>
-  <VerticalTimelineElement
-    iconStyle={{ background: 'rgb(16, 204, 82)', color: '#fff' }}
-    icon={<StarIcon />}
-  />
-</VerticalTimeline>
+      <VerticalTimelineElement
+        className="vertical-timeline-element--work"
+        contentStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
+        contentArrowStyle={{ borderRight: '7px solid  rgb(33, 150, 243)' }}
+        date="2011 - present"
+        iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
+        icon={<HowToVoteIcon />}
+      >
+        <h3 className="vertical-timeline-element-title">Creative Director</h3>
+        <h4 className="vertical-timeline-element-subtitle">Miami, FL</h4>
+        <p>
+          Creative Direction, User Experience, Visual Design, Project Management, Team Leading
+        </p>
+      </VerticalTimelineElement>
+      <VerticalTimelineElement
+        className="vertical-timeline-element--work"
+        date="2010 - 2011"
+        iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
+        icon={<HowToVoteIcon />}
+      >
+        <h3 className="vertical-timeline-element-title">Art Director</h3>
+        <h4 className="vertical-timeline-element-subtitle">San Francisco, CA</h4>
+        <p>
+          Creative Direction, User Experience, Visual Design, SEO, Online Marketing
+        </p>
+      </VerticalTimelineElement>
+      <VerticalTimelineElement
+        className="vertical-timeline-element--work"
+        date="2008 - 2010"
+        iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
+        icon={<HowToVoteIcon />}
+      >
+        <h3 className="vertical-timeline-element-title">Web Designer</h3>
+        <h4 className="vertical-timeline-element-subtitle">Los Angeles, CA</h4>
+        <p>
+          User Experience, Visual Design
+        </p>
+      </VerticalTimelineElement>
+      <VerticalTimelineElement
+        className="vertical-timeline-element--work"
+        date="2006 - 2008"
+        iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
+        icon={<HowToVoteIcon />}
+      >
+        <h3 className="vertical-timeline-element-title">Web Designer</h3>
+        <h4 className="vertical-timeline-element-subtitle">San Francisco, CA</h4>
+        <p>
+          User Experience, Visual Design
+        </p>
+      </VerticalTimelineElement>
+      <VerticalTimelineElement
+        className="vertical-timeline-element--education"
+        date="April 2013"
+        iconStyle={{ background: 'rgb(233, 30, 99)', color: '#fff' }}
+        icon={<HowToVoteIcon />}
+      >
+        <h3 className="vertical-timeline-element-title">Content Marketing for Web, Mobile and Social Media</h3>
+        <h4 className="vertical-timeline-element-subtitle">Online Course</h4>
+        <p>
+          Strategy, Social Media
+        </p>
+      </VerticalTimelineElement>
+      <VerticalTimelineElement
+        className="vertical-timeline-element--education"
+        date="November 2012"
+        iconStyle={{ background: 'rgb(233, 30, 99)', color: '#fff' }}
+        icon={<HowToVoteIcon />}
+      >
+        <h3 className="vertical-timeline-element-title">Agile Development Scrum Master</h3>
+        <h4 className="vertical-timeline-element-subtitle">Certification</h4>
+        <p>
+          Creative Direction, User Experience, Visual Design
+        </p>
+      </VerticalTimelineElement>
+      <VerticalTimelineElement
+        className="vertical-timeline-element--education"
+        date="Nov 3 2020"
+        iconStyle={{ background: 'rgb(233, 30, 99)', color: '#fff' }}
+        icon={<HowToVoteIcon />}
+      >
+        <h3 className="vertical-timeline-element-title">Election Day</h3>
+        {/*<h4 className="vertical-timeline-element-subtitle">General Election</h4>*/}
+        <p>
+          Presidential election
+          <br></br>
+          Congressional elections
+          <br></br>
+          Senate Elections
+        </p>
+      </VerticalTimelineElement>
+      <VerticalTimelineElement
+        iconStyle={{ background: 'rgb(16, 204, 82)', color: '#fff' }}
+        icon={<StarIcon />}
+      />
+    </VerticalTimeline>
 
   );
 }
@@ -1039,7 +1093,7 @@ const govType = styled.div`
 });
 
 const desc = {
-  "pres": ["The president of the United States (POTUS) is the head of state and head of government of the United States of America.","The president directs the executive branch of the federal government and is the commander-in-chief of the United States Armed Forces."],
+  "pres": ["The president of the United States (POTUS) is the head of state and","head of government of the United States of America. The president","directs the executive branch of the federal government and is the ","commander-in-chief of the United States Armed Forces."],
   "US Attorney General":["The United States attorney general (AG) is the head of the United States Department of Justice, the chief lawyer of the federal government", "of the United States, and a member of the Cabinet of the United States."],
   "State Attorney General":"Attorneys general are the top legal officers of their state or territory. They advise and represent their legislature and state agencies and act as the “People’s Lawyer” for the citizens. Most are elected, though a few are appointed by the governor.",
   "Supreme Court Justice":"In the United States, a state supreme court (known by other names in some states) is the highest court in the state judiciary of a U.S. state. On matters of state law, the judgment of a state supreme court is considered final and binding in both state and federal courts.",
@@ -1068,6 +1122,10 @@ const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
               {desc["pres"][0]}
               <br></br>
               {desc["pres"][1]}
+              <br></br>
+              {desc["pres"][2]}
+              <br></br>
+              {desc["pres"][3]}
             </Typography>
           </CardContent>
         </CardActionArea>
@@ -1493,7 +1551,7 @@ const lawChart = {
       id: "node2",
       type: "Pres",
       position: {
-        x: 1300,
+        x: 1550,
         y: 800
       },
       ports: {
@@ -1508,7 +1566,7 @@ const lawChart = {
       type: "cabinet",
       position: {
         x: 1300,
-        y: y_val+=250
+        y: y_val+=280
       },
       ports: {
         port1: {
@@ -1842,7 +1900,7 @@ function Hierarchy() {
 
   return (
     <div className={classes.root}>
-        <CssBaseline />
+      <CssBaseline />
         <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
           <Toolbar className={classes.toolbar}>
             <IconButton
@@ -1857,11 +1915,6 @@ function Hierarchy() {
             <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
               Dashboard
             </Typography>
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
           </Toolbar>
         </AppBar>
         <Drawer
@@ -2014,8 +2067,7 @@ function SignIn() {
               Informed Voter
             </Typography>
           </Grid>
-        </Grid>
-        
+        </Grid>  
         <br></br>
         <div>
          Find information on your elected officials
