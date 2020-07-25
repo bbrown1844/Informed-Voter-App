@@ -203,6 +203,7 @@ let exec_rows = [];
 let jud_rows = [];
 let law_rows = [];
 
+
 const loadScript = (url, callback) => {
   let script = document.createElement("script");
   script.type = "text/javascript";
@@ -1037,7 +1038,12 @@ const govType = styled.div`
   },
 });
 
-
+const desc = {
+  "pres": ["The president of the United States (POTUS) is the head of state and head of government of the United States of America.","The president directs the executive branch of the federal government and is the commander-in-chief of the United States Armed Forces."],
+  "US Attorney General":["The United States attorney general (AG) is the head of the United States Department of Justice, the chief lawyer of the federal government", "of the United States, and a member of the Cabinet of the United States."],
+  "State Attorney General":"Attorneys general are the top legal officers of their state or territory. They advise and represent their legislature and state agencies and act as the “People’s Lawyer” for the citizens. Most are elected, though a few are appointed by the governor.",
+  "Supreme Court Justice":"In the United States, a state supreme court (known by other names in some states) is the highest court in the state judiciary of a U.S. state. On matters of state law, the judgment of a state supreme court is considered final and binding in both state and federal courts.",
+}
 
 const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
   const classes = useStylesCard();
@@ -1059,12 +1065,14 @@ const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
               President of the United States
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
-              Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-              across all continents except Antarctica
+              {desc["pres"][0]}
+              <br></br>
+              {desc["pres"][1]}
             </Typography>
           </CardContent>
         </CardActionArea>
         <CardActions>
+          <AccountBalanceIcon/>
           <Button size="small" color="Secondary">
             Federal
           </Button>
@@ -1073,6 +1081,39 @@ const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
       </Outer>
     )
   }
+  else if (node.type === 'cabinet') {
+    return (
+      <Outer>
+      <Card className={classes.root}>
+      <CardActionArea>
+        <CardMedia
+          className={classes.media}
+          image="images/flag.png"
+          title="Contemplative Reptile"
+        />
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="h2">
+            Presidential Cabinet
+          </Typography>
+          <Typography variant="body2" color="textSecondary" component="p">
+              The Cabinet includes the Vice President and the heads of 15 executive departments — the Secretaries of Agriculture, Commerce, Defense, 
+              <br></br>
+              Education, Energy, Health and Human Services, Homeland Security, Housing and Urban Development, Interior, Labor, State, Transportation, 
+              <br></br>
+              Treasury, and Veterans Affairs, as well as the Attorney General.
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+      <CardActions>
+        <GavelIcon/>
+        <Button size="small" color="Secondary">
+          Federal
+        </Button>
+      </CardActions>
+    </Card>
+      </Outer>
+    )
+  } 
   else if (node.type === 'US Att') {
     return (
       <Outer>
@@ -1088,16 +1129,17 @@ const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
             United States Attorney General
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-            across all continents except Antarctica
+              {desc["US Attorney General"][0]}
+              <br></br>
+              {desc["US Attorney General"][1]}
           </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>
+        <GavelIcon/>
         <Button size="small" color="Secondary">
           Federal
         </Button>
-        <GavelIcon/>
       </CardActions>
     </Card>
       </Outer>
@@ -1315,6 +1357,84 @@ const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
       </Outer>
     )
   }
+  else if (node.type === 'patrol')
+  {
+    return (
+      <Outer>
+        <Card className={classes.root}>
+          <CardActionArea>
+            <CardMedia
+              className={classes.media}
+              image="images/flag.png"
+              title="Contemplative Reptile"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="h2">
+                State and Highway Patrol
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+          <CardActions>
+            <Button size="small" color="Primary">
+              State
+            </Button>
+          </CardActions>
+        </Card>
+      </Outer>
+    )
+  }
+  else if (node.type === 'office state attorney')
+  {
+    return (
+      <Outer>
+        <Card className={classes.root}>
+          <CardActionArea>
+            <CardMedia
+              className={classes.media}
+              image="images/flag.png"
+              title="Contemplative Reptile"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="h2">
+                Office of the Attorney General
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+          <CardActions>
+            <Button size="small" color="Primary">
+              State
+            </Button>
+          </CardActions>
+        </Card>
+      </Outer>
+    )
+  }
+  else if (node.type === 'state attorney')
+  {
+    return (
+      <Outer>
+        <Card className={classes.root}>
+          <CardActionArea>
+            <CardMedia
+              className={classes.media}
+              image="images/flag.png"
+              title="Contemplative Reptile"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="h2">
+                State Attorney
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+          <CardActions>
+            <Button size="small" color="Primary">
+              State
+            </Button>
+          </CardActions>
+        </Card>
+      </Outer>
+    )
+  }
   else if (node.type === 'State')
   {
     return (
@@ -1359,16 +1479,33 @@ const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
 
 var x_val = 500;
 var y_val = 800;
+var x_state = 1200;
+var y_state = 2100;
+var y_fdepart = 1800;
 
 const lawChart = {
   offset: {
-    x: -800,
+    x: -1200,
     y: -750
   },
   nodes: {
-    node1: {
-      id: "node1",
-      type: "US Att",
+    node2: {
+      id: "node2",
+      type: "Pres",
+      position: {
+        x: 1300,
+        y: 800
+      },
+      ports: {
+        port1: {
+          id: "port1",
+          type: "output"
+        }
+      }
+    },
+    cabinet: {
+      id: "cabinet",
+      type: "cabinet",
       position: {
         x: 1300,
         y: y_val+=250
@@ -1390,17 +1527,27 @@ const lawChart = {
         }
       }
     },
-    node2: {
-      id: "node2",
-      type: "Pres",
+    node1: {
+      id: "node1",
+      type: "US Att",
       position: {
         x: 1300,
-        y: 800
+        y: y_val+=250
       },
       ports: {
         port1: {
           id: "port1",
-          type: "output"
+          type: "output",
+          properties: {
+            value: "yes"
+          }
+        },
+        port2: {
+          id: "port2",
+          type: "output",
+          properties: {
+            value: "yes"
+          }
         }
       }
     },
@@ -1427,7 +1574,7 @@ const lawChart = {
       type: "FBI",
       position: {
         x: x_val,
-        y: 1600
+        y: y_fdepart
       },
       ports: {
         port1: {
@@ -1445,7 +1592,7 @@ const lawChart = {
       type: "USMS",
       position: {
         x: x_val+=350,
-        y: 1600
+        y: y_fdepart
       },
       ports: {
         port1: {
@@ -1463,7 +1610,7 @@ const lawChart = {
       type: "ATF",
       position: {
         x: x_val+=350,
-        y: 1600
+        y: y_fdepart
       },
       ports: {
         port1: {
@@ -1481,7 +1628,7 @@ const lawChart = {
       type: "DEA",
       position: {
         x: x_val+=350,
-        y: 1600
+        y: y_fdepart
       },
       ports: {
         port1: {
@@ -1499,7 +1646,7 @@ const lawChart = {
       type: "HC",
       position: {
         x: x_val+=350,
-        y: 1600
+        y: y_fdepart
       },
       ports: {
         port1: {
@@ -1517,7 +1664,7 @@ const lawChart = {
       type: "ICE",
       position: {
         x: x_val+=350,
-        y: 1600
+        y: y_fdepart
       },
       ports: {
         port1: {
@@ -1535,7 +1682,61 @@ const lawChart = {
       type: "CIA",
       position: {
         x: x_val+=350,
-        y: 1600
+        y: y_fdepart
+      },
+      ports: {
+        port1: {
+          id: "port1",
+          type: "output"
+        },
+        port2: {
+          id: "port2",
+          type: "output"
+        },
+      }
+    },
+    node11: {
+      id: "node11",
+      type: "patrol",
+      position: {
+        x: x_state,
+        y: y_state
+      },
+      ports: {
+        port1: {
+          id: "port1",
+          type: "output"
+        },
+        port2: {
+          id: "port2",
+          type: "output"
+        },
+      }
+    },
+    node12: {
+      id: "node12",
+      type: "office state attorney",
+      position: {
+        x: x_state+=400,
+        y: y_state
+      },
+      ports: {
+        port1: {
+          id: "port1",
+          type: "output"
+        },
+        port2: {
+          id: "port2",
+          type: "output"
+        },
+      }
+    },
+    node13: {
+      id: "node13",
+      type: "state attorney",
+      position: {
+        x: x_state+=450,
+        y: y_state
       },
       ports: {
         port1: {
