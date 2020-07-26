@@ -491,8 +491,8 @@ function Copyright() {
 }
 
 // Generate Order Data
-function createData(id, date, name, shipTo, paymentMethod, amount) {
-  return { id, date, name, shipTo, paymentMethod, amount };
+function createData(id, name, pos, address, social, reelect) {
+  return { id, name, pos, address, social, reelect };
 }
 
 // function getData(){
@@ -544,6 +544,9 @@ function Deposits() {
       <Title>Current Location</Title>
       <p>{curr_addr}</p>
       <Title>Nearest Polling Station</Title>
+      <Link to="/signin">
+        <ListItemText primary="Change Location" />
+      </Link>
       {/*}
       <Typography color="textSecondary" className={classes.depositContext}>
         on 15 March, 2019
@@ -690,11 +693,11 @@ function Orders() {
         <TableBody>
           {exec.map((row) => (
             <TableRow key={row.id}>
-              <TableCell>{row.date}</TableCell>
-              <TableCell><Popup trigger={<button> {row.name}</button>} position="right center"></Popup></TableCell>
-              <TableCell>{row.shipTo}</TableCell>
-              <TableCell>{row.paymentMethod}</TableCell>
-              <TableCell align="right">{row.amount}</TableCell>
+              <TableCell>{row.name}</TableCell>
+              <TableCell><Popup trigger={<button> {row.pos}</button>} position="right center"></Popup></TableCell>
+              <TableCell>{row.address}</TableCell>
+              <TableCell>{row.social}</TableCell>
+              <TableCell align="right">{row.reelect}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -719,11 +722,11 @@ function Orders() {
         <TableBody>
           {jud.map((row) => (
             <TableRow key={row.id}>
-              <TableCell>{row.date}</TableCell>
-              <TableCell><Popup trigger={<button> {row.name}</button>} position="right center">This is a test</Popup></TableCell>
-              <TableCell>{row.shipTo}</TableCell>
-              <TableCell>{row.paymentMethod}</TableCell>
-              <TableCell align="right">{row.amount}</TableCell>
+              <TableCell>{row.name}</TableCell>
+              <TableCell><Popup trigger={<button> {row.pos}</button>} position="right center"></Popup></TableCell>
+              <TableCell>{row.address}</TableCell>
+              <TableCell>{row.social}</TableCell>
+              <TableCell align="right">{row.reelect}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -748,11 +751,11 @@ function Orders() {
         <TableBody>
           {law.map((row) => (
             <TableRow key={row.id}>
-              <TableCell>{row.date}</TableCell>
-              <TableCell><Popup trigger={<button> {row.name}</button>} position="right center">This is a test</Popup></TableCell>
-              <TableCell>{row.shipTo}</TableCell>
-              <TableCell>{row.paymentMethod}</TableCell>
-              <TableCell align="right">{row.amount}</TableCell>
+              <TableCell>{row.name}</TableCell>
+              <TableCell><Popup trigger={<button> {row.pos}</button>} position="right center"></Popup></TableCell>
+              <TableCell>{row.address}</TableCell>
+              <TableCell>{row.social}</TableCell>
+              <TableCell align="right">{row.reelect}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -939,84 +942,64 @@ function Timeline(){
 
 }
 
+function parseDate(pDate){
+  // var dateD = {"Jan":1,"Feb":2,"March":3,"April":4,"May":5,"June":6,"July":7,"August":8,"Sep":9,"Oct":10, "Nov":11, "Dec":12}
+  // var s = pDate.split(" ");
+  // return new Date(s[2],dateD[s[0]],s[1]);
+  return new Date(pDate);
+}
 
 function TimelineComponent() {
+
+  var store = require('store');
+  var exec = store.get('exec').name;
+  var jud = store.get('jud').name;
+  var law = store.get('law').name;
+
+  const parseItems = []
+
+  const items = []
+
+  for (var j=0; j<exec.length; j++){
+    if (exec[j]['reelect'] != undefined && exec[j]['pos'] != "undefined")
+    {
+      console.log(parseDate(exec[j]['reelect']));
+      var sDate = new Date(new Date(exec[j]['reelect']));
+      parseItems.push({'name':exec[j]['name'],'pos':exec[j]['pos'], 'date':exec[j]['reelect'], 'sortDate':sDate});
+    }
+  }
+  for (var j=0; j<jud.length; j++){
+    if (jud[j]['reelect'] != undefined && jud[j]['pos'].search("Supreme Court Justice") == -1)
+    {
+      parseItems.push({'name':jud[j]['name'],'pos':jud[j]['pos'], 'date':jud[j]['reelect'], 'sortDate':parseDate(jud[j]['reelect'])});
+    }
+  }
+  for (var j=0; j<law.length; j++){
+    if (law[j]['reelect'] != undefined)
+    {
+      parseItems.push({'name':law[j]['name'],'pos':law[j]['pos'], 'date':law[j]['reelect'], 'sortDate':parseDate(law[j]['reelect'])});
+    }
+  }
+
+  parseItems.sort((a,b) => a.sortDate-b.sortDate);
+  for (var i=0; i<parseItems.length; i++) {
+    console.log(parseItems[i]);
+    items.push(
+      <VerticalTimelineElement
+        className="vertical-timeline-element--education"
+        date={parseItems[i]['date']}
+        iconStyle={{ background: 'rgb(233, 30, 99)', color: '#fff' }}
+        icon={<HowToVoteIcon />}
+      >
+        <h3 className="vertical-timeline-element-title">{parseItems[i]['name']}</h3>
+        <h4 className="vertical-timeline-element-subtitle">{parseItems[i]['pos']}</h4>
+
+      </VerticalTimelineElement>
+    )
+  }
+
   return(
     <VerticalTimeline>
-      <VerticalTimelineElement
-        className="vertical-timeline-element--work"
-        contentStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
-        contentArrowStyle={{ borderRight: '7px solid  rgb(33, 150, 243)' }}
-        date="2011 - present"
-        iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
-        icon={<HowToVoteIcon />}
-      >
-        <h3 className="vertical-timeline-element-title">Creative Director</h3>
-        <h4 className="vertical-timeline-element-subtitle">Miami, FL</h4>
-        <p>
-          Creative Direction, User Experience, Visual Design, Project Management, Team Leading
-        </p>
-      </VerticalTimelineElement>
-      <VerticalTimelineElement
-        className="vertical-timeline-element--work"
-        date="2010 - 2011"
-        iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
-        icon={<HowToVoteIcon />}
-      >
-        <h3 className="vertical-timeline-element-title">Art Director</h3>
-        <h4 className="vertical-timeline-element-subtitle">San Francisco, CA</h4>
-        <p>
-          Creative Direction, User Experience, Visual Design, SEO, Online Marketing
-        </p>
-      </VerticalTimelineElement>
-      <VerticalTimelineElement
-        className="vertical-timeline-element--work"
-        date="2008 - 2010"
-        iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
-        icon={<HowToVoteIcon />}
-      >
-        <h3 className="vertical-timeline-element-title">Web Designer</h3>
-        <h4 className="vertical-timeline-element-subtitle">Los Angeles, CA</h4>
-        <p>
-          User Experience, Visual Design
-        </p>
-      </VerticalTimelineElement>
-      <VerticalTimelineElement
-        className="vertical-timeline-element--work"
-        date="2006 - 2008"
-        iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
-        icon={<HowToVoteIcon />}
-      >
-        <h3 className="vertical-timeline-element-title">Web Designer</h3>
-        <h4 className="vertical-timeline-element-subtitle">San Francisco, CA</h4>
-        <p>
-          User Experience, Visual Design
-        </p>
-      </VerticalTimelineElement>
-      <VerticalTimelineElement
-        className="vertical-timeline-element--education"
-        date="April 2013"
-        iconStyle={{ background: 'rgb(233, 30, 99)', color: '#fff' }}
-        icon={<HowToVoteIcon />}
-      >
-        <h3 className="vertical-timeline-element-title">Content Marketing for Web, Mobile and Social Media</h3>
-        <h4 className="vertical-timeline-element-subtitle">Online Course</h4>
-        <p>
-          Strategy, Social Media
-        </p>
-      </VerticalTimelineElement>
-      <VerticalTimelineElement
-        className="vertical-timeline-element--education"
-        date="November 2012"
-        iconStyle={{ background: 'rgb(233, 30, 99)', color: '#fff' }}
-        icon={<HowToVoteIcon />}
-      >
-        <h3 className="vertical-timeline-element-title">Agile Development Scrum Master</h3>
-        <h4 className="vertical-timeline-element-subtitle">Certification</h4>
-        <p>
-          Creative Direction, User Experience, Visual Design
-        </p>
-      </VerticalTimelineElement>
       <VerticalTimelineElement
         className="vertical-timeline-element--education"
         date="Nov 3 2020"
@@ -1033,6 +1016,7 @@ function TimelineComponent() {
           Senate Elections
         </p>
       </VerticalTimelineElement>
+      {items}
       <VerticalTimelineElement
         iconStyle={{ background: 'rgb(16, 204, 82)', color: '#fff' }}
         icon={<StarIcon />}
@@ -1415,6 +1399,39 @@ const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
       </Outer>
     )
   }
+  else if (node.type === 'commissioner')
+  {
+    return (
+      <Outer>
+        <Card className={classes.root}>
+          <CardActionArea>
+            <CardMedia
+              className={classes.media}
+              image="images/flag.png"
+              title="Contemplative Reptile"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="h2">
+                State Highway Patrol Commissioner
+              </Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+              The California Highway Patrol (CHP) is dedicated to providing Safety,
+              <br></br> 
+              Service, and Security to the residents and visitors of California who
+              <br></br> 
+              use the thousands of miles of our state's roadways. 
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+          <CardActions>
+            <Button size="small" color="Primary">
+              State
+            </Button>
+          </CardActions>
+        </Card>
+      </Outer>
+    )
+  }
   else if (node.type === 'patrol')
   {
     return (
@@ -1430,12 +1447,26 @@ const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
               <Typography gutterBottom variant="h5" component="h2">
                 State and Highway Patrol
               </Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+                A highway patrol is either a police unit created primarily for the 
+                <br></br> 
+                purpose of overseeing and enforcing traffic safety compliance on 
+                <br></br> 
+                roads and highways, or a detail within an existing local or regional 
+                <br></br>
+                police agency that is primarily concerned with such duties.
+                <br></br>
+              </Typography>
+
             </CardContent>
           </CardActionArea>
           <CardActions>
             <Button size="small" color="Primary">
               State
             </Button>
+            <Typography variant="body2" color="textSecondary" component="p">
+              Overseen by the California Highway Patrol Commissioner 
+            </Typography>
           </CardActions>
         </Card>
       </Outer>
@@ -1456,12 +1487,24 @@ const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
               <Typography gutterBottom variant="h5" component="h2">
                 Office of the Attorney General
               </Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+                The Attorney General's responsibilities include safeguarding the public from 
+                <br></br>
+                violent criminals, preserving California's spectacular natural resources, 
+                <br></br>
+                enforcing civil rights laws, and helping victims of identity theft, 
+                <br></br>
+                mortgage-related fraud, illegal business practices, and other consumer crimes.
+              </Typography>
             </CardContent>
           </CardActionArea>
           <CardActions>
             <Button size="small" color="Primary">
               State
             </Button>
+          <Typography variant="body2" color="textSecondary" component="p">
+            Overseen by State Attorney General
+          </Typography>
           </CardActions>
         </Card>
       </Outer>
@@ -1482,12 +1525,84 @@ const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
               <Typography gutterBottom variant="h5" component="h2">
                 State Attorney
               </Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+                Attorneys general are the top legal officers of their state or territory. 
+                <br></br>
+                They advise and represent their legislature and state agencies and act as 
+                <br></br>
+                the “People’s Lawyer” for the citizens.
+              </Typography>
             </CardContent>
           </CardActionArea>
           <CardActions>
             <Button size="small" color="Primary">
               State
             </Button>
+          </CardActions>
+        </Card>
+      </Outer>
+    )
+  }
+  else if (node.type === 'deputy sheriff')
+  {
+    return (
+      <Outer>
+        <Card className={classes.root}>
+          <CardActionArea>
+            <CardMedia
+              className={classes.media}
+              image="images/flag.png"
+              title="Contemplative Reptile"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="h2">
+                Deputy Sheriff
+              </Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+                Enforce state law at the local county level. Deputies commonly run the local jail, 
+                <br></br>
+                serve warrants and court summons, and respond to calls for service in areas 
+                <br></br>
+                outside local police jurisdictions.
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+          <CardActions>
+            <Button size="small" color="Warning">
+              Local
+            </Button>
+            <Typography variant="body2" color="textSecondary" component="p">
+              Elected by the people
+            </Typography>
+          </CardActions>
+        </Card>
+      </Outer>
+    )
+  }
+  else if (node.type === 'chief of police')
+  {
+    return (
+      <Outer>
+        <Card className={classes.root}>
+          <CardActionArea>
+            <CardMedia
+              className={classes.media}
+              image="images/flag.png"
+              title="Contemplative Reptile"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="h2">
+                Chief of Police
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+          <CardActions>
+            <Button size="small" color="Success">
+              Local
+            </Button>
+            <Typography variant="body2" color="textSecondary" component="p">
+              Chosen by major or elected by the people
+            </Typography>
           </CardActions>
         </Card>
       </Outer>
@@ -1538,21 +1653,26 @@ const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
 var x_val = 500;
 var y_val = 800;
 var x_state = 1200;
-var y_state = 2100;
-var y_fdepart = 1800;
+var y_state = 2250;
+var y_fdepart = 1950;
+var x_local = 1500;
 
 const lawChart = {
+  // offset: {
+  //   x: -1200,
+  //   y: -750
+  // },
   offset: {
     x: -1200,
-    y: -750
+    y: -2300
   },
   nodes: {
-    node2: {
-      id: "node2",
+    pres: {
+      id: "pres",
       type: "Pres",
       position: {
         x: 1550,
-        y: 800
+        y: 750
       },
       ports: {
         port1: {
@@ -1565,7 +1685,7 @@ const lawChart = {
       id: "cabinet",
       type: "cabinet",
       position: {
-        x: 1300,
+        x: 1295,
         y: y_val+=280
       },
       ports: {
@@ -1585,12 +1705,12 @@ const lawChart = {
         }
       }
     },
-    node1: {
-      id: "node1",
+    attorney: {
+      id: "attorney",
       type: "US Att",
       position: {
         x: 1300,
-        y: y_val+=250
+        y: y_val+=300
       },
       ports: {
         port1: {
@@ -1614,7 +1734,7 @@ const lawChart = {
       type: "DOJ",
       position: {
         x: 700,
-        y: y_val+=250
+        y: y_val+=280
       },
       ports: {
         port1: {
@@ -1635,10 +1755,6 @@ const lawChart = {
         y: y_fdepart
       },
       ports: {
-        port1: {
-          id: "port1",
-          type: "output"
-        },
         port2: {
           id: "port2",
           type: "output"
@@ -1653,10 +1769,6 @@ const lawChart = {
         y: y_fdepart
       },
       ports: {
-        port1: {
-          id: "port1",
-          type: "output"
-        },
         port2: {
           id: "port2",
           type: "output"
@@ -1675,10 +1787,6 @@ const lawChart = {
           id: "port1",
           type: "output"
         },
-        port2: {
-          id: "port2",
-          type: "output"
-        },
       }
     },
     node7: {
@@ -1693,10 +1801,6 @@ const lawChart = {
           id: "port1",
           type: "output"
         },
-        port2: {
-          id: "port2",
-          type: "output"
-        },
       }
     },
     node8: {
@@ -1707,10 +1811,6 @@ const lawChart = {
         y: y_fdepart
       },
       ports: {
-        port1: {
-          id: "port1",
-          type: "output"
-        },
         port2: {
           id: "port2",
           type: "output"
@@ -1725,10 +1825,6 @@ const lawChart = {
         y: y_fdepart
       },
       ports: {
-        port1: {
-          id: "port1",
-          type: "output"
-        },
         port2: {
           id: "port2",
           type: "output"
@@ -1743,10 +1839,6 @@ const lawChart = {
         y: y_fdepart
       },
       ports: {
-        port1: {
-          id: "port1",
-          type: "output"
-        },
         port2: {
           id: "port2",
           type: "output"
@@ -1757,8 +1849,8 @@ const lawChart = {
       id: "node11",
       type: "patrol",
       position: {
-        x: x_state,
-        y: y_state
+        x: x_state-100,
+        y: y_state+300
       },
       ports: {
         port1: {
@@ -1771,11 +1863,11 @@ const lawChart = {
         },
       }
     },
-    node12: {
-      id: "node12",
-      type: "office state attorney",
+    HCCommisioner: {
+      id: "HCCommisioner",
+      type: "commissioner",
       position: {
-        x: x_state+=400,
+        x: x_state-100,
         y: y_state
       },
       ports: {
@@ -1789,12 +1881,66 @@ const lawChart = {
         },
       }
     },
-    node13: {
-      id: "node13",
+    stateAttorn: {
+      id: "stateAttorn",
       type: "state attorney",
       position: {
-        x: x_state+=450,
+        x: x_state+720,
         y: y_state
+      },
+      ports: {
+        port1: {
+          id: "port1",
+          type: "output"
+        },
+        port2: {
+          id: "port2",
+          type: "output"
+        },
+      }
+    },
+    officeSAttorn: {
+      id: "officeSAttorn",
+      type: "office state attorney",
+      position: {
+        x: x_state+720,
+        y: y_state+300
+      },
+      ports: {
+        port1: {
+          id: "port1",
+          type: "output"
+        },
+        port2: {
+          id: "port2",
+          type: "output"
+        },
+      }
+    },
+    node14: {
+      id: "node14",
+      type: "deputy sheriff",
+      position: {
+        x: x_local,
+        y: y_state+=600
+      },
+      ports: {
+        port1: {
+          id: "port1",
+          type: "output"
+        },
+        port2: {
+          id: "port2",
+          type: "output"
+        },
+      }
+    },
+    node15: {
+      id: "node15",
+      type: "chief of police",
+      position: {
+        x: x_local,
+        y: y_state+=300
       },
       ports: {
         port1: {
@@ -1815,26 +1961,37 @@ const lawChart = {
     link1: {
       id: "link1",
       from: {
-        nodeId: "node1",
-        portId: "port2"
+        nodeId: "pres",
+        portId: "port1"
       },
       to: {
-        nodeId: "node2",
-        portId: "port1"
+        nodeId: "cabinet",
+        portId: "port2"
       },
     },
     link2: {
       id: "link2",
       from: {
-        nodeId: "node1",
+        nodeId: "cabinet",
+        portId: "port1"
+      },
+      to: {
+        nodeId: "attorney",
+        portId: "port2"
+      },
+    },
+    link3: {
+      id: "link3",
+      from: {
+        nodeId: "attorney",
         portId: "port1"
       },
       to: {
         nodeId: "node3",
-        portId: "port1"
+        portId: "port2"
       },
     },
-    link3: {
+    link4: {
       id: "link3",
       from: {
         nodeId: "node4",
@@ -1845,7 +2002,7 @@ const lawChart = {
         portId: "port1"
       },
     },
-    link4: {
+    link5: {
       id: "link4",
       from: {
         nodeId: "node5",
@@ -1856,7 +2013,7 @@ const lawChart = {
         portId: "port2"
       },
     },
-    link5: {
+    link6: {
       id: "link5",
       from: {
         nodeId: "node6",
@@ -1867,7 +2024,7 @@ const lawChart = {
         portId: "port2"
       },
     },
-    link6: {
+    link7: {
       id: "link6",
       from: {
         nodeId: "node7",
@@ -1875,6 +2032,39 @@ const lawChart = {
       },
       to: {
         nodeId: "node3",
+        portId: "port2"
+      },
+    },
+    homeland: {
+      id: "link6",
+      from: {
+        nodeId: "attorney",
+        portId: "port2"
+      },
+      to: {
+        nodeId: "node8",
+        portId: "port2"
+      },
+    },
+    ICE: {
+      id: "link6",
+      from: {
+        nodeId: "attorney",
+        portId: "port2"
+      },
+      to: {
+        nodeId: "node9",
+        portId: "port2"
+      },
+    },
+    CIA: {
+      id: "link6",
+      from: {
+        nodeId: "attorney",
+        portId: "port2"
+      },
+      to: {
+        nodeId: "node10",
         portId: "port2"
       },
     },
