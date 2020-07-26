@@ -1203,12 +1203,18 @@ const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
             Department of Justice
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-            across all continents except Antarctica
+            The United States Department of Justice, also known as the Justice Department, 
+            <br></br>
+            is a federal executive department of the United States government responsible 
+            <br></br>
+            for the enforcement of the law and administration of justice in the United States, 
+            <br></br>
+            and is equivalent to the justice or interior ministries of other countries.
           </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>
+        <VerifiedUserIcon/>
         <Button size="small" color="Secondary">
           Federal
         </Button>
@@ -1232,9 +1238,15 @@ const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
               <Typography gutterBottom variant="h5" component="h2">
                 FBI
               </Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+                The Federal Bureau of Investigation is the domestic intelligence and security
+                <br></br> 
+                service of the United States and its principal federal law enforcement agency
+              </Typography>
             </CardContent>
           </CardActionArea>
           <CardActions>
+            <VerifiedUserIcon/>
             <Button size="small" color="Secondary">
               Federal
             </Button>
@@ -1258,9 +1270,24 @@ const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
               <Typography gutterBottom variant="h5" component="h2">
                 USMS
               </Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+                The Marshals Service is the primary agency for fugitive operations, the protection 
+                <br></br> 
+                of officers of the federal judiciary, the management of criminal assets, the 
+                <br></br> 
+                operation of the United States Federal Witness Protection Program and the Justice 
+                <br></br> 
+                Prisoner and Alien Transportation System, the execution of federal arrest warrants, 
+                <br></br> 
+                and the protection of senior government officials through the Office of Protective 
+                <br></br> 
+                Operations. 
+              </Typography>
+
             </CardContent>
           </CardActionArea>
           <CardActions>
+            <VerifiedUserIcon/>
             <Button size="small" color="Secondary">
               Federal
             </Button>
@@ -1284,9 +1311,19 @@ const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
               <Typography gutterBottom variant="h5" component="h2">
                 ATF
               </Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+               The Bureau of Alcohol, Tobacco, Firearms and Explosives deals with violent criminals, 
+               <br></br>
+               criminal organizations, the illegal use and trafficking of firearms, the illegal use 
+               <br></br>
+               and storage of explosives, acts of arson and bombings, acts of terrorism, and the illegal 
+               <br></br>
+               diversion of alcohol and tobacco products.
+              </Typography>
             </CardContent>
           </CardActionArea>
           <CardActions>
+            <VerifiedUserIcon/>
             <Button size="small" color="Secondary">
               Federal
             </Button>
@@ -1310,9 +1347,17 @@ const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
               <Typography gutterBottom variant="h5" component="h2">
                 DEA
               </Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+                The Drug Enforcement Administration is a United States federal law enforcement
+                <br></br>
+                agency under the United States Department of Justice, tasked with combating drug
+                <br></br>
+                trafficking and distribution within the United States.
+              </Typography>
             </CardContent>
           </CardActionArea>
           <CardActions>
+            <VerifiedUserIcon/>
             <Button size="small" color="Secondary">
               Federal
             </Button>
@@ -1336,9 +1381,15 @@ const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
               <Typography gutterBottom variant="h5" component="h2">
                 Homeland Security
               </Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+                The Department of Homeland Security secures the nation's air, land, and sea 
+                <br></br>
+                borders to prevent illegal activity while facilitating lawful travel and trade.
+              </Typography>
             </CardContent>
           </CardActionArea>
           <CardActions>
+            <VerifiedUserIcon/>
             <Button size="small" color="Secondary">
               Federal
             </Button>
@@ -1362,9 +1413,19 @@ const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
               <Typography gutterBottom variant="h5" component="h2">
                 ICE
               </Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+                The U.S. Immigration and Customs Enforcement is a federal law enforcement agency 
+                <br></br>
+                under the U.S. Department of Homeland Security. ICE's stated mission is to protect 
+                <br></br>
+                America from the cross-border crime and illegal immigration that threaten national 
+                <br></br>
+                security and public safety.
+              </Typography>
             </CardContent>
           </CardActionArea>
           <CardActions>
+            <VerifiedUserIcon/>
             <Button size="small" color="Secondary">
               Federal
             </Button>
@@ -1391,6 +1452,7 @@ const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
             </CardContent>
           </CardActionArea>
           <CardActions>
+            <VerifiedUserIcon/>
             <Button size="small" color="Secondary">
               Federal
             </Button>
@@ -1424,6 +1486,7 @@ const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
             </CardContent>
           </CardActionArea>
           <CardActions>
+            <AccountBalanceIcon/>
             <Button size="small" color="Primary">
               State
             </Button>
@@ -1432,7 +1495,7 @@ const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
       </Outer>
     )
   }
-  else if (node.type === 'patrol')
+  else if (node.type === 'statePatrol')
   {
     return (
       <Outer>
@@ -1461,6 +1524,7 @@ const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
             </CardContent>
           </CardActionArea>
           <CardActions>
+            <VerifiedUserIcon/>
             <Button size="small" color="Primary">
               State
             </Button>
@@ -1499,6 +1563,7 @@ const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
             </CardContent>
           </CardActionArea>
           <CardActions>
+            <GavelIcon/>
             <Button size="small" color="Primary">
               State
             </Button>
@@ -1535,6 +1600,7 @@ const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
             </CardContent>
           </CardActionArea>
           <CardActions>
+            <GavelIcon/>
             <Button size="small" color="Primary">
               State
             </Button>
@@ -1559,15 +1625,18 @@ const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
                 Deputy Sheriff
               </Typography>
               <Typography variant="body2" color="textSecondary" component="p">
-                Enforce state law at the local county level. Deputies commonly run the local jail, 
+                Enforce state law at the local county level. Deputies commonly  
                 <br></br>
-                serve warrants and court summons, and respond to calls for service in areas 
+                run the local jail, serve warrants and court summons, and  
                 <br></br>
-                outside local police jurisdictions.
+                respond to calls for service in areas outside local police 
+                <br></br>
+                jurisdictions.
               </Typography>
             </CardContent>
           </CardActionArea>
           <CardActions>
+            <VerifiedUserIcon/>
             <Button size="small" color="Warning">
               Local
             </Button>
@@ -1594,9 +1663,21 @@ const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
               <Typography gutterBottom variant="h5" component="h2">
                 Chief of Police
               </Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+                A police chief oversees the police department they serve. A police chief's
+                <br></br>
+                responsibilities and duties include testing, training, and evaluating officers, 
+                <br></br>
+                assigning promotions, delegating casework, and conducting administrative duties. 
+                <br></br>
+                The chief oversees the operations and budget of the police department and is 
+                <br></br>
+                therefore praised for successes and held responsible for failures.
+              </Typography>
             </CardContent>
           </CardActionArea>
           <CardActions>
+            <VerifiedUserIcon/>
             <Button size="small" color="Success">
               Local
             </Button>
@@ -1652,10 +1733,10 @@ const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
 
 var x_val = 500;
 var y_val = 800;
-var x_state = 1200;
+var x_state = 2200;
 var y_state = 2250;
-var y_fdepart = 1950;
-var x_local = 1500;
+var y_fdepart = 2100;
+var x_local = 1100;
 
 const lawChart = {
   // offset: {
@@ -1663,15 +1744,15 @@ const lawChart = {
   //   y: -750
   // },
   offset: {
-    x: -1200,
-    y: -2300
+    x: -2200,
+    y: -700
   },
   nodes: {
     pres: {
       id: "pres",
       type: "Pres",
       position: {
-        x: 1550,
+        x: 2500,
         y: 750
       },
       ports: {
@@ -1685,7 +1766,7 @@ const lawChart = {
       id: "cabinet",
       type: "cabinet",
       position: {
-        x: 1295,
+        x: 2300,
         y: y_val+=280
       },
       ports: {
@@ -1696,20 +1777,13 @@ const lawChart = {
             value: "yes"
           }
         },
-        port2: {
-          id: "port2",
-          type: "output",
-          properties: {
-            value: "yes"
-          }
-        }
       }
     },
     attorney: {
       id: "attorney",
       type: "US Att",
       position: {
-        x: 1300,
+        x: 2300,
         y: y_val+=300
       },
       ports: {
@@ -1733,7 +1807,7 @@ const lawChart = {
       id: "node3",
       type: "DOJ",
       position: {
-        x: 700,
+        x: 1700,
         y: y_val+=280
       },
       ports: {
@@ -1765,7 +1839,7 @@ const lawChart = {
       id: "node5",
       type: "USMS",
       position: {
-        x: x_val+=350,
+        x: x_val+=600,
         y: y_fdepart
       },
       ports: {
@@ -1779,7 +1853,7 @@ const lawChart = {
       id: "node6",
       type: "ATF",
       position: {
-        x: x_val+=350,
+        x: x_val+=700,
         y: y_fdepart
       },
       ports: {
@@ -1793,7 +1867,7 @@ const lawChart = {
       id: "node7",
       type: "DEA",
       position: {
-        x: x_val+=350,
+        x: x_val+=700,
         y: y_fdepart
       },
       ports: {
@@ -1807,7 +1881,7 @@ const lawChart = {
       id: "node8",
       type: "HC",
       position: {
-        x: x_val+=350,
+        x: x_val+=700,
         y: y_fdepart
       },
       ports: {
@@ -1821,7 +1895,7 @@ const lawChart = {
       id: "node9",
       type: "ICE",
       position: {
-        x: x_val+=350,
+        x: x_val+=650,
         y: y_fdepart
       },
       ports: {
@@ -1835,7 +1909,7 @@ const lawChart = {
       id: "node10",
       type: "CIA",
       position: {
-        x: x_val+=350,
+        x: x_val+=700,
         y: y_fdepart
       },
       ports: {
@@ -1845,38 +1919,30 @@ const lawChart = {
         },
       }
     },
-    node11: {
-      id: "node11",
-      type: "patrol",
+    statePatrol: {
+      id: "statePatrol",
+      type: "statePatrol",
       position: {
         x: x_state-100,
-        y: y_state+300
+        y: y_state+500
       },
       ports: {
         port1: {
           id: "port1",
-          type: "output"
-        },
-        port2: {
-          id: "port2",
           type: "output"
         },
       }
     },
-    HCCommisioner: {
-      id: "HCCommisioner",
+    HPCommisioner: {
+      id: "HPCommisioner",
       type: "commissioner",
       position: {
         x: x_state-100,
-        y: y_state
+        y: y_state+200
       },
       ports: {
         port1: {
           id: "port1",
-          type: "output"
-        },
-        port2: {
-          id: "port2",
           type: "output"
         },
       }
@@ -1885,16 +1951,12 @@ const lawChart = {
       id: "stateAttorn",
       type: "state attorney",
       position: {
-        x: x_state+720,
-        y: y_state
+        x: x_state+620,
+        y: y_state+200
       },
       ports: {
         port1: {
           id: "port1",
-          type: "output"
-        },
-        port2: {
-          id: "port2",
           type: "output"
         },
       }
@@ -1903,54 +1965,34 @@ const lawChart = {
       id: "officeSAttorn",
       type: "office state attorney",
       position: {
-        x: x_state+720,
-        y: y_state+300
+        x: x_state+620,
+        y: y_state+500
       },
       ports: {
         port1: {
           id: "port1",
           type: "output"
         },
-        port2: {
-          id: "port2",
-          type: "output"
-        },
       }
     },
-    node14: {
-      id: "node14",
+    sheriff: {
+      id: "sheriff",
       type: "deputy sheriff",
       position: {
-        x: x_local,
-        y: y_state+=600
+        x: x_state-100,
+        y: y_state+=900
       },
       ports: {
-        port1: {
-          id: "port1",
-          type: "output"
-        },
-        port2: {
-          id: "port2",
-          type: "output"
-        },
       }
     },
-    node15: {
-      id: "node15",
+    chiefPolice: {
+      id: "chiefPolice",
       type: "chief of police",
       position: {
-        x: x_local,
-        y: y_state+=300
+        x: x_state+620,
+        y: y_state
       },
       ports: {
-        port1: {
-          id: "port1",
-          type: "output"
-        },
-        port2: {
-          id: "port2",
-          type: "output"
-        },
       }
     },
     
@@ -1966,7 +2008,7 @@ const lawChart = {
       },
       to: {
         nodeId: "cabinet",
-        portId: "port2"
+        portId: "port1"
       },
     },
     link2: {
@@ -2036,10 +2078,10 @@ const lawChart = {
       },
     },
     homeland: {
-      id: "link6",
+      id: "homeland",
       from: {
-        nodeId: "attorney",
-        portId: "port2"
+        nodeId: "cabinet",
+        portId: "port1"
       },
       to: {
         nodeId: "node8",
@@ -2049,8 +2091,8 @@ const lawChart = {
     ICE: {
       id: "link6",
       from: {
-        nodeId: "attorney",
-        portId: "port2"
+        nodeId: "cabinet",
+        portId: "port1"
       },
       to: {
         nodeId: "node9",
@@ -2060,12 +2102,34 @@ const lawChart = {
     CIA: {
       id: "link6",
       from: {
-        nodeId: "attorney",
-        portId: "port2"
+        nodeId: "cabinet",
+        portId: "port1"
       },
       to: {
         nodeId: "node10",
         portId: "port2"
+      },
+    },
+    sPatrol: {
+      id: "spatrol",
+      from: {
+        nodeId: "HPCommisioner",
+        portId: "port1"
+      },
+      to: {
+        nodeId: "statePatrol",
+        portId: "port1"
+      },
+    },
+    attOffice: {
+      id: "attOffice",
+      from: {
+        nodeId: "stateAttorn",
+        portId: "port1"
+      },
+      to: {
+        nodeId: "officeSAttorn",
+        portId: "port1"
       },
     },
   },
