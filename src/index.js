@@ -78,6 +78,7 @@ import {
 } from "react-router-dom";
 
 
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -234,6 +235,16 @@ function handleScriptLoad(updateQuery, autoCompleteRef) {
   );
 }
 
+const elections = {
+
+   "mayor":{
+    "San Francisco, CA, USA":"Nov 3, 2020",
+    "Santa Clara, CA, USA": "Nov 3, 2022"
+   },
+
+
+}
+
 async function handlePlaceSelect(updateQuery) {
   const addressObject = autoComplete.getPlace();
   const query = addressObject.formatted_address;
@@ -309,13 +320,13 @@ async function handlePlaceSelect(updateQuery) {
     var i = 0;
     var sec = 0;
 
-    //TODO: Add in phone #
     while (i < temp.length) {
       let tempDict = {};
       
       if (temp[i]["name"] == "U.S. Senator"){
           tempDict['name'] = temp2[sec]['name'];
           tempDict['pos'] = "U.S. Senator";
+          tempDict['level'] = "State"
           try{
             tempDict['address'] = temp2[sec]['address'][0]["line1"];
           }
@@ -335,6 +346,7 @@ async function handlePlaceSelect(updateQuery) {
           tempDict['name'] = temp2[sec+1]['name'];
           tempDict['pos'] = "U.S. Senator";
           tempDict['re-election'] = "Nov 6, 2025";
+          tempDict['level'] = "State"
 
           try{
             tempDict['address'] = temp2[sec+1]['address'][0]["line1"];
@@ -353,6 +365,7 @@ async function handlePlaceSelect(updateQuery) {
           tempDict ={}
           tempDict['name'] = temp2[sec]['name'];
           tempDict['pos'] = "CA Supreme Court Justice";
+          tempDict['level'] = "State"
           try{
             tempDict['address'] = temp2[sec]['address'][0]["line1"];
             tempDict['re-election'] = "Nominated by Governor";
@@ -370,6 +383,7 @@ async function handlePlaceSelect(updateQuery) {
         tempDict['name'] = temp2[sec]['name'];
         tempDict['pos'] = temp[i]["name"];
         tempDict['re-election'] = "2022";
+        tempDict['level'] = "State"
         try{
           tempDict['address'] = temp2[sec]['address'][0]["line1"];
         }
@@ -385,6 +399,8 @@ async function handlePlaceSelect(updateQuery) {
       {
         tempDict['name'] = temp2[sec]['name'];
         tempDict['pos'] = temp[i]["name"];
+        tempDict['level'] = "Local"
+
         try{
           tempDict['address'] = temp2[sec]['address'][0]["line1"];
           tempDict['re-election'] = "2022";
@@ -402,6 +418,8 @@ async function handlePlaceSelect(updateQuery) {
         tempDict['name'] = temp2[sec]['name'];
         tempDict['pos'] = temp[i]["name"];
         tempDict ['re-election'] = "Nov 3, 2020";
+        tempDict['level'] = "Federal"
+
         try{
           tempDict['address'] = temp2[sec]['address'][0]["line1"];
         }
@@ -411,7 +429,36 @@ async function handlePlaceSelect(updateQuery) {
         }
         Executive.push(tempDict);
         sec+=1;
-
+      }
+      else if (temp[i]["name"].search("Governor") != -1)
+      {
+        tempDict['name'] = temp2[sec]['name'];
+        tempDict['pos'] = temp[i]["name"];
+        tempDict ['re-election'] = "Nov 8, 2022";
+        try{
+          tempDict['address'] = temp2[sec]['address'][0]["line1"];
+        }
+        catch (err)
+        {
+          tempDict['address'] = "None";
+        }
+        Executive.push(tempDict);
+        sec+=1;
+      }
+      else if (temp[i]["name"].search("Mayor") != -1)
+      {
+        tempDict['name'] = temp2[sec]['name'];
+        tempDict['pos'] = temp[i]["name"];
+        tempDict ['re-election'] = elections['mayor'][addressObject.formatted_address];
+        try{
+          tempDict['address'] = temp2[sec]['address'][0]["line1"];
+        }
+        catch (err)
+        {
+          tempDict['address'] = "None";
+        }
+        Executive.push(tempDict);
+        sec+=1;
       }
       else
       {
