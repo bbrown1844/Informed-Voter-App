@@ -669,23 +669,21 @@ export const secondaryListItems = (
 export const hierarchyListItems = (
   <div>
     <ListSubheader inset>Select One</ListSubheader>
-    <ListItem button >
-      <ListItemIcon>
-        <CreateIcon />
-      </ListItemIcon>
-        <ListItemText primary="Legislation" />
-    </ListItem>
     <ListItem button>
       <ListItemIcon>
         <VerifiedUserIcon />
       </ListItemIcon>
-      <ListItemText primary="Law Enforcement" />
+      <Link to="/lawenforcement">
+        <ListItemText primary="Law Enforcement" />
+      </Link>
     </ListItem>
     <ListItem button>
       <ListItemIcon>
         <GavelIcon />
       </ListItemIcon>
-      <ListItemText primary="Judicial" />
+      <Link to="/judicial">
+        <ListItemText primary="Judicial" />
+      </Link>
     </ListItem>
   </div>
 );
@@ -837,10 +835,16 @@ class App extends React.Component {
               <Timeline />
             </Route>
             <Route path="/hierarchy">
-              <Hierarchy />
+              <HierarchyJudicial />
             </Route>
             <Route path="/location">
               <Location />
+            </Route>
+            <Route path="/judicial">
+              <HierarchyJudicial />
+            </Route>
+            <Route path="/lawenforcement">
+              <Hierarchy />
             </Route>
           </Switch>
         </div>
@@ -2185,6 +2189,494 @@ const lawChart = {
 };
 
 
+//Judicial Hierarchy 
+const NodeInnerCustomJudicial = ({ node, config }: INodeInnerDefaultProps) => {
+  const classes = useStylesCard();
+  const bull = <span className={classes.bullet}>•</span>;
+
+  if (node.type === 'Fed Court')
+  {
+    return (
+      <Outer>
+        <Card className={classes.root}>
+        <CardActionArea>
+          <CardMedia
+            className={classes.media}
+            image="images/flag.png"
+            title="Contemplative Reptile"
+          />
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="h2">
+              Federal Courts
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+        <CardActions>
+          <GavelIcon/>
+          <Button size="small" color="Secondary">
+            Federal
+          </Button>
+        </CardActions>
+        </Card>
+      </Outer>
+    )
+  }
+  else if (node.type === 'US Supreme Court') {
+    return (
+      <Outer>
+      <Card className={classes.root}>
+      <CardActionArea>
+        <CardMedia
+          className={classes.media}
+          image="images/flag.png"
+          title="Contemplative Reptile"
+        />
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="h2">
+            US Supreme Court
+          </Typography>
+          <Typography variant="body2" color="textSecondary" component="p">
+            The Supreme Court of the United States is the highest court 
+            <br></br>
+            in the federal judiciary of the United States of America.
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+      <CardActions>
+        <GavelIcon/>
+        <Button size="small" color="Secondary">
+          Federal
+        </Button>
+      </CardActions>
+    </Card>
+      </Outer>
+    )
+  } 
+  else if (node.type === 'US Court Appeals') {
+    return (
+      <Outer>
+      <Card className={classes.root}>
+      <CardActionArea>
+        <CardMedia
+          className={classes.media}
+          image="images/flag.png"
+          title="Contemplative Reptile"
+        />
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="h2">
+            US Court of Appeals
+          </Typography>
+          <Typography variant="body2" color="textSecondary" component="p">
+            The United States Courts of Appeals or Circuit Courts are the 
+            <br></br>
+            intermediate appellate courts of the United States federal judiciary.
+            <br></br>
+            The courts are divided into 13 circuits, and each hears appeals from 
+            <br></br>
+            the district courts within its borders, or in some instances from 
+            <br></br>
+            other designated federal courts and administrative agencies. 
+            <br></br>
+            Appeals from the circuit courts are taken to the Supreme Court of the
+            <br></br>
+            United States.
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+      <CardActions>
+        <GavelIcon/>
+        <Button size="small" color="Secondary">
+          Federal
+        </Button>
+      </CardActions>
+    </Card>
+      </Outer>
+    )
+  } 
+  else if (node.type === 'US District Court')
+  {
+    return (
+      <Outer>
+      <Card className={classes.root}>
+      <CardActionArea>
+        <CardMedia
+          className={classes.media}
+          image="images/flag.png"
+          title="Contemplative Reptile"
+        />
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="h2">
+            US District Courts
+          </Typography>
+          <Typography variant="body2" color="textSecondary" component="p">
+            The United States District Courts are the general trial courts of the 
+            <br></br>
+            United States federal judiciary. Both civil and criminal cases are filed 
+            <br></br>
+            in district courts, each of which is a court of law, equity, and admiralty. 
+            <br></br>
+            There is a United States bankruptcy court associated with each United 
+            <br></br>
+            States district court.
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+      <CardActions>
+        <GavelIcon/>
+        <Button size="small" color="Secondary">
+          Federal
+        </Button>
+      </CardActions>
+    </Card>
+      </Outer>
+    )
+  }
+  else if (node.type === 'US Bank Court')
+  {
+    return (
+      <Outer>
+        <Card className={classes.root}>
+          <CardActionArea>
+            <CardMedia
+              className={classes.media}
+              image="images/flag.png"
+              title="Contemplative Reptile"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="h2">
+                US Bankruptcy Court
+              </Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+                All bankruptcy cases are handled in federal courts under rules outlined in 
+                <br></br>
+                the U.S. Bankruptcy Code. Filing bankruptcy can help a person by discarding 
+                <br></br>
+                debt or making a plan to repay debts. A bankruptcy case normally begins when
+                <br></br>
+                the debtor files a petition with the bankruptcy court. A petition may be 
+                <br></br>
+                filed by an individual, by spouses together, or by a corporation or other 
+                <br></br>
+                entity.   
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+          <CardActions>
+            <GavelIcon/>
+            <Button size="small" color="Secondary">
+              Federal
+            </Button>
+          </CardActions>
+        </Card>
+      </Outer>
+    )
+  }
+  else if (node.type === 'State Courts')
+  {
+    return (
+      <Outer>
+        <Card className={classes.root}>
+          <CardActionArea>
+            <CardMedia
+              className={classes.media}
+              image="images/flag.png"
+              title="Contemplative Reptile"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="h2">
+                State Courts
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+          <CardActions>
+            <GavelIcon/>
+            <Button size="small" color="Secondary">
+              Federal
+            </Button>
+          </CardActions>
+        </Card>
+      </Outer>
+    )
+  }
+  else if (node.type === 'State Supreme Courts')
+  {
+    return (
+      <Outer>
+        <Card className={classes.root}>
+          <CardActionArea>
+            <CardMedia
+              className={classes.media}
+              image="images/flag.png"
+              title="Contemplative Reptile"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="h2">
+                State Supreme Courts
+              </Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+                In the United States, a state supreme court is the highest court in the
+                <br></br>
+                state judiciary of a U.S. state. On matters of state law, the judgment 
+                <br></br>
+                of a state supreme court is considered final and binding in both state 
+                <br></br>
+                and federal courts.
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+          <CardActions>
+            <GavelIcon/>
+            <Button size="small" color="Secondary">
+              Federal
+            </Button>
+          </CardActions>
+        </Card>
+      </Outer>
+    )
+  }
+  else if (node.type === 'State Court Appeal')
+  {
+    return (
+      <Outer>
+        <Card className={classes.root}>
+          <CardActionArea>
+            <CardMedia
+              className={classes.media}
+              image="images/flag.png"
+              title="Contemplative Reptile"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="h2">
+                State Courts of Appeal
+              </Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+                An appellate court, commonly called an appeals court, court of appeals 
+                <br></br>
+                (American English), appeal court (British English), court of second instance
+                <br></br>
+                or second instance court, is any court of law that is empowered to hear an 
+                <br></br>
+                appeal of a trial court or other lower tribunal.
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+          <CardActions>
+            <GavelIcon/>
+            <Button size="small" color="Secondary">
+              Federal
+            </Button>
+          </CardActions>
+        </Card>
+      </Outer>
+    )
+  }
+}
+
+var x_Title = 1000;
+var y_Title = 800;
+var x_second = 200;
+var y_second = 1050;
+var x_third = 700;
+var y_third = 1400;
+
+const judChart = {
+  offset: {
+    x: -470,
+    y: -700
+  },
+  nodes: {
+    fedcourts: {
+      id: "fedcourts",
+      type: "Fed Court",
+      position: {
+        x: x_Title,
+        y: y_Title
+      },
+      ports: {
+        port1: {
+          id: "port1",
+          type: "output"
+        }
+      }
+    },
+    statecourts: {
+      id: "statecourts",
+      type: "State Courts",
+      position: {
+        x: x_Title+=700,
+        y: y_Title
+      },
+      ports: {
+        port1: {
+          id: "port1",
+          type: "output",
+          properties: {
+            value: "yes"
+          }
+        },
+      }
+    },
+    USsupreme: {
+      id: "USsupreme",
+      type: "US Supreme Court",
+      position: {
+        x: x_second,
+        y: y_second
+      },
+      ports: {
+        port1: {
+          id: "port1",
+          type: "output",
+          properties: {
+            value: "yes"
+          }
+        },
+      }
+    },
+    UScourtappeals: {
+      id: "UScourtappeals",
+      type: "US Court Appeals",
+      position: {
+        x: x_second+=500,
+        y: y_second
+      },
+      ports: {
+        port1: {
+          id: "port1",
+          type: "output"
+        },
+      }
+    },
+    StateSupremeCourt: {
+      id: "StateSupremeCourt",
+      type: "State Supreme Courts",
+      position: {
+        x: x_second+=600,
+        y: y_second
+      },
+      ports: {
+        port1: {
+          id: "port1",
+          type: "output"
+        },
+      }
+    },
+    StateCourtAppeal: {
+      id: "StateCourtAppeal",
+      type: "State Court Appeal",
+      position: {
+        x: x_second+=620,
+        y: y_second
+      },
+      ports: {
+        port1: {
+          id: "port1",
+          type: "output"
+        },
+      }
+    },
+    USdistcourt: {
+      id: "USdistcourt",
+      type: "US District Court",
+      position: {
+        x: x_third,
+        y: y_third
+      },
+      ports: {
+        port1: {
+          id: "port1",
+          type: "output"
+        },
+      }
+    },
+    USbankcourt: {
+      id: "USbankcourt",
+      type: "US Bank Court",
+      position: {
+        x: x_third,
+        y: y_third+=400
+      },
+      ports: {
+        port1: {
+          id: "port1",
+          type: "output"
+        },
+      }
+    },
+  },
+  
+  links: {
+    USsupreme: {
+      id: "USsupreme",
+      from: {
+        nodeId: "USsupreme",
+        portId: "port1"
+      },
+      to: {
+        nodeId: "fedcourts",
+        portId: "port1"
+      },
+    },
+    UScourtappeals: {
+      id: "UScourtappeals",
+      from: {
+        nodeId: "UScourtappeals",
+        portId: "port1"
+      },
+      to: {
+        nodeId: "fedcourts",
+        portId: "port1"
+      },
+    },
+    StateSupremeCourt: {
+      id: "StateSupremeCourt",
+      from: {
+        nodeId: "StateSupremeCourt",
+        portId: "port1"
+      },
+      to: {
+        nodeId: "statecourts",
+        portId: "port1"
+      },
+    },
+    StateCourtAppeal: {
+      id: "StateCourtAppeal",
+      from: {
+        nodeId: "StateCourtAppeal",
+        portId: "port1"
+      },
+      to: {
+        nodeId: "statecourts",
+        portId: "port1"
+      },
+    },
+    USdistcourt: {
+      id: "USdistcourt",
+      from: {
+        nodeId: "USdistcourt",
+        portId: "port1"
+      },
+      to: {
+        nodeId: "fedcourts",
+        portId: "port1"
+      },
+    },
+    USbankcourt: {
+      id: "USbankcourt",
+      from: {
+        nodeId: "USbankcourt",
+        portId: "port1"
+      },
+      to: {
+        nodeId: "USdistcourt",
+        portId: "port1"
+      },
+    },
+  },
+  selected: {},
+  hovered: {}
+};
+
 function Hierarchy() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
@@ -2262,6 +2754,83 @@ function Hierarchy() {
   );
 }
 
+function HierarchyJudicial() {
+  const classes = useStyles();
+  const [open, setOpen] = React.useState(true);
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  const name = window.$name;
+
+  //Inner Node
+
+  return (
+    <div className={classes.root}>
+      <CssBaseline />
+        <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
+          <Toolbar className={classes.toolbar}>
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+              Dashboard
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          variant="permanent"
+          classes={{
+            paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+          }}
+          open={open}
+        >
+          <div className={classes.toolbarIcon}>
+            <IconButton onClick={handleDrawerClose}>
+              <ChevronLeftIcon />
+            </IconButton>
+          </div>
+          <Divider />
+          <List>{mainListItems}</List>
+          <Divider />
+          <List>{hierarchyListItems}</List>
+        </Drawer>
+        <main className={classes.content}>
+          <div className={classes.appBarSpacer} />
+          <Container maxWidth="lg" className={classes.container}>
+            <Grid container spacing={3}>
+              {/* Recent Deposits */}
+              <Grid item xs={12}>
+              <AppBar position="static">
+                <Toolbar>
+                  <Typography variant="h6" className={classes.title}>
+                    Hierarchy
+                  </Typography>
+                </Toolbar>
+              </AppBar>
+                <Paper>
+                  {/*<FlowChartWithState config={{ readonly: true , smartRouting: true}} initialValue={lawChart} Components={{NodeInner: NodeInnerCustom}}/>*/}
+                  <FlowChartWithState config={{ readonly: true , smartRouting: true}} initialValue={judChart} Components={{NodeInner: NodeInnerCustomJudicial}}/>
+                </Paper>
+              </Grid>
+            </Grid>
+            <Box pt={4}>
+              <Copyright />
+            </Box>
+          </Container>
+        </main>
+      </div>
+  );
+}
 
 
 function Location() {
