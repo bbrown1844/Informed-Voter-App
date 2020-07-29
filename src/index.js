@@ -590,7 +590,7 @@ function Deposits() {
     <React.Fragment>
       <Title>Current Location</Title>
       <p>{curr_addr}</p>
-      <Title>Nearest Polling Station</Title>
+      {/*<Title>Nearest Polling Station</Title>*/}
       <Link to="/signin">
         <ListItemText primary="Change Location" />
       </Link>
@@ -970,7 +970,7 @@ function Timeline(){
           <Divider />
           <List>{mainListItems}</List>
           <Divider />
-          <List>{secondaryListItems}</List>
+          {/*<List>{secondaryListItems}</List>*/}
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
@@ -2390,8 +2390,8 @@ const NodeInnerCustomJudicial = ({ node, config }: INodeInnerDefaultProps) => {
           </CardActionArea>
           <CardActions>
             <GavelIcon/>
-            <Button size="small" color="Secondary">
-              Federal
+            <Button size="small" color="Primary">
+              State
             </Button>
           </CardActions>
         </Card>
@@ -2426,8 +2426,8 @@ const NodeInnerCustomJudicial = ({ node, config }: INodeInnerDefaultProps) => {
           </CardActionArea>
           <CardActions>
             <GavelIcon/>
-            <Button size="small" color="Secondary">
-              Federal
+            <Button size="small" color="Primary">
+              State
             </Button>
           </CardActions>
         </Card>
@@ -2462,8 +2462,8 @@ const NodeInnerCustomJudicial = ({ node, config }: INodeInnerDefaultProps) => {
           </CardActionArea>
           <CardActions>
             <GavelIcon/>
-            <Button size="small" color="Secondary">
-              Federal
+            <Button size="small" color="Primary">
+              State
             </Button>
           </CardActions>
         </Card>
